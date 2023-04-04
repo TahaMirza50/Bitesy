@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:resturant_review_app/app_router.dart';
+import 'package:resturant_review_app/router/app_router.dart';
 
 void main() {
   runApp(const MyApp());

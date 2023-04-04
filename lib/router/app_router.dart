@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:resturant_review_app/login.dart';
-import 'package:resturant_review_app/signup.dart';
-import 'package:resturant_review_app/start.dart';
+import 'package:resturant_review_app/screens/login.dart';
+import 'package:resturant_review_app/screens/signup.dart';
+import 'package:resturant_review_app/screens/start.dart';
 
 
 final GoRouter router = GoRouter(
