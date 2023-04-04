@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -19,7 +20,9 @@ class _SignUpPageState extends State<SignUpPage> {
           backgroundColor: Colors.transparent,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.brown),
-            onPressed: () {},
+            onPressed: () {
+              return context.go('/');
+            },
           ),
           centerTitle: true,
           title: const Text(
@@ -214,7 +217,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: RichText(
                   text: TextSpan(
                     text: "Already Have an Account?",
-                    recognizer: TapGestureRecognizer()..onTap = () {},
+                    recognizer: TapGestureRecognizer()..onTap = () {return context.go('/login');},
                     style: const TextStyle(
                         color: Colors.grey, fontWeight: FontWeight.bold),
                   ),

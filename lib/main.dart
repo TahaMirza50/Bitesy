@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:resturant_review_app/login.dart';
-import 'package:resturant_review_app/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:resturant_review_app/start.dart';
+import 'package:resturant_review_app/app_router.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,13 +11,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.brown,
         fontFamily: GoogleFonts.poppins().fontFamily,
       ),
-      home: const HomePage(),
+      routerConfig:router
     );
   }
 }

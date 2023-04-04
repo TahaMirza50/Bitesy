@@ -1,8 +1,7 @@
 import 'dart:ui';
-
-import 'package:flutter_svg/flutter_svg.dart';
-
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:resturant_review_app/app_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -82,7 +81,9 @@ class _HomePageState extends State<HomePage> {
                         height: 75,
                         width: 175,
                         child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              return context.go('/login');
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.transparent,
                               side: const BorderSide(
@@ -105,7 +106,9 @@ class _HomePageState extends State<HomePage> {
                         height: 75,
                         width: 175,
                         child: ElevatedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              return context.go('/sign_up');
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.brown,
                               shape: RoundedRectangleBorder(
