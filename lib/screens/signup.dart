@@ -10,6 +10,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  var currentSelectedValue;
   bool _isObscure1 = true;
   bool _isObscure2 = true;
   @override
@@ -56,31 +57,32 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Form(
                     child: Column(
                   children: [
-                    TextField(
-                      cursorColor: Colors.brown,
-                      decoration: const InputDecoration(
-                        prefixIcon: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.brown,
-                          ),
-                        ),
-                        hintText: "Your Username",
-                        contentPadding: EdgeInsets.all(15),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(16.0)),
-                            borderSide:
-                                BorderSide(color: Colors.brown, width: 2)),
-                      ),
-                      onChanged: (value) {},
-                      keyboardType: TextInputType.emailAddress,
-                      textInputAction: TextInputAction.next,
-                    ),
+                        dataField(context),
+                        // TextField(
+                        //   cursorColor: Colors.brown,
+                        //   decoration: const InputDecoration(
+                        //     prefixIcon: Padding(
+                        //       padding: EdgeInsets.all(16),
+                        //       child: Icon(
+                        //         Icons.person,
+                        //         color: Colors.brown,
+                        //       ),
+                        //     ),
+                        //     hintText: "Your Username",
+                        //     contentPadding: EdgeInsets.all(15),
+                        //     border: OutlineInputBorder(
+                        //       borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                        //     ),
+                        //     focusedBorder: OutlineInputBorder(
+                        //         borderRadius:
+                        //             BorderRadius.all(Radius.circular(16.0)),
+                        //         borderSide:
+                        //             BorderSide(color: Colors.brown, width: 2)),
+                        //   ),
+                        //   onChanged: (value) {},
+                        //   keyboardType: TextInputType.emailAddress,
+                        //   textInputAction: TextInputAction.next,
+                        // ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -227,6 +229,129 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget dataField(BuildContext context){
+
+    return Column(
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              width:200,
+              child: Column(children: [
+                TextField(
+                  cursorColor: Colors.brown,
+                  decoration: const InputDecoration(
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.brown,
+                      ),
+                    ),
+                    hintText: "First Name",
+                    contentPadding: EdgeInsets.all(15),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(16.0)),
+                        borderSide:
+                            BorderSide(color: Colors.brown, width: 2)),
+                  ),
+                  onChanged: (value) {},
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextField(
+                  cursorColor: Colors.brown,
+                  decoration: const InputDecoration(
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.brown,
+                      ),
+                    ),
+                    hintText: "Last Name",
+                    contentPadding: EdgeInsets.all(15),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius:
+                            BorderRadius.all(Radius.circular(16.0)),
+                        borderSide:
+                            BorderSide(color: Colors.brown, width: 2)),
+                  ),
+                  onChanged: (value) {},
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                ),
+              ],),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: Container(
+                height: 55,
+                child: FormField<String>(
+  builder: (FormFieldState<String> state) {
+    return InputDecorator(
+      decoration: InputDecoration(
+        prefixIcon: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Icon( currentSelectedValue == 'F'
+                ? Icons.female_rounded
+                : Icons.male_rounded,
+                    color: Colors.brown,
+     ),
+        ),
+        hintText: "G",
+        contentPadding: const EdgeInsets.all(15),
+        border: const OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+        ),
+        focusedBorder: const OutlineInputBorder(
+            borderRadius:
+                  BorderRadius.all(Radius.circular(16.0)),
+            borderSide:
+                  BorderSide(color: Colors.brown, width: 2)),
+      ),
+      isEmpty: currentSelectedValue == null || currentSelectedValue == '',
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: currentSelectedValue,
+          onChanged: (String? newValue) {
+            setState(() {
+                currentSelectedValue = newValue!;
+            });
+          },
+          items: ["M","F"].map((String value) {
+            return DropdownMenuItem<String>(
+                value: value,
+                child: Text(value),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  },
+),
+              )
+            ),
+
+        ],),
+        
+      ],
     );
   }
 }
