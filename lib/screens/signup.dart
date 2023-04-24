@@ -1,6 +1,9 @@
+import 'package:email_validator/email_validator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
+import 'package:resturant_review_app/screens/home.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -13,6 +16,44 @@ class _SignUpPageState extends State<SignUpPage> {
   var currentSelectedValue;
   bool _isObscure1 = true;
   bool _isObscure2 = true;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passController1 = TextEditingController();
+  final TextEditingController _passController2 = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+
+    static Future<User?> signinUsingEmailPassword({required String email, required String password, required BuildContext context}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    User? user;
+    try{
+      UserCredential userCredential = await auth.createUserWithEmailAndPassword(email: email, password: password);
+      user = userCredential.user;
+    }on FirebaseAuthException catch (e){
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          child: AlertDialog(
+            title: const Text("Error",style: TextStyle(
+                  color: Colors.brown, fontWeight: FontWeight.bold),),
+            content: Text(e.message!),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+    }
+    return user;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.brown),
             onPressed: () {
-              return context.go('/');
+              Navigator.pop(context);
             },
           ),
           centerTitle: true,
@@ -55,6 +96,7 @@ class _SignUpPageState extends State<SignUpPage> {
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 30.0),
                 child: Form(
+                  key: formKey,
                     child: Column(
                   children: [
                         dataField(context),
@@ -86,7 +128,13 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    TextField(
+                    TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (email) =>
+                        email != null && !EmailValidator.validate(email)
+                            ? 'Invalid email'
+                            : null,
+                      controller: _emailController,
                       cursorColor: Colors.brown,
                       decoration: const InputDecoration(
                         prefixIcon: Padding(
@@ -115,6 +163,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 20,
                     ),
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => value != null && value.length <6 
+                      ? 'Enter min. 6 character'
+                      : null,
+                      controller: _passController1,
                       cursorColor: Colors.brown,
                       textInputAction: TextInputAction.done,
                       obscureText: _isObscure1,
@@ -152,6 +205,11 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 20,
                     ),
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      validator: (value) => value != null && value.compareTo(_passController1.text) != 0
+                      ? 'Password does not match'
+                      : null,
+                      controller: _passController2,
                       cursorColor: Colors.brown,
                       textInputAction: TextInputAction.done,
                       obscureText: _isObscure2,
@@ -196,7 +254,17 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 50,
                       width: MediaQuery.of(context).size.width - 40,
                       child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () async {
+                            final isValid = formKey.currentState!.validate();
+                            if(!isValid) return;
+                            User? user = await signinUsingEmailPassword(email: _emailController.text, password: _passController1.text, context: context); 
+                            if(user!=null){
+                               Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const LoggedHomePage()),
+                              );
+                            }
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown,
                             shape: const RoundedRectangleBorder(
