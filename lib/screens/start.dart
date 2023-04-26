@@ -6,6 +6,8 @@ import 'package:resturant_review_app/screens/home.dart';
 import 'package:resturant_review_app/screens/login.dart';
 import 'package:resturant_review_app/screens/signup.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:twitter_login/schemes/auth_token.dart';
+import 'package:twitter_login/twitter_login.dart';
 
 
 class HomePage extends StatefulWidget {
@@ -16,6 +18,48 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  Future<User?> signInWithTwitter({required BuildContext context}) async {
+    FirebaseAuth auth = FirebaseAuth.instance;
+    final twitterLogin = TwitterLogin(
+      apiKey: 'KPU7i1tFlIvuHMrW3gui5eaFn', 
+      apiSecretKey: 'WDGXfnZ0SNBNp04SBWmSwEMVHWN0zqWc0ZQSmSWlp3fw8tKdUt', 
+      redirectURI: 'twitter-login://');
+    User? user;
+    
+    try{
+      final result = await twitterLogin.loginV2();
+      if (result.status == TwitterLoginStatus.loggedIn) {
+        final credential = TwitterAuthProvider.credential(accessToken: result.authToken!, secret: result.authTokenSecret!);
+        UserCredential userCredential = await auth.signInWithCredential(credential);
+        user = userCredential.user;
+      }
+    } on FirebaseAuthException catch (e){
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (BuildContext context) {
+                return ClipRRect(
+                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                  child: AlertDialog(
+                    title: const Text("Error",style: TextStyle(
+                          color: Colors.brown, fontWeight: FontWeight.bold),),
+                    content: Text(e.message!),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+            }
+    return user;
+  }
 
   Future<User?> signInWithFacebook({required BuildContext context}) async {
     User? user;
@@ -289,7 +333,7 @@ class _HomePageState extends State<HomePage> {
                         height: 50,
                         child: ElevatedButton.icon(
                           onPressed: () async {
-                             User? user = await signInWithFacebook(context: context); 
+                             User? user = await signInWithTwitter(context: context); 
                               if(user!=null){
                                  Navigator.push(
                                   context,

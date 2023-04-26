@@ -3,8 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resturant_review_app/screens/home.dart';
-// import 'package:resturant_review_app/router/app_router.dart';
-// import 'package:go_router/go_router.dart';
 import 'package:resturant_review_app/screens/start.dart';
 import 'firebase_options.dart';
 

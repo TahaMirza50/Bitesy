@@ -44,6 +44,9 @@ dependencies:
   email_validator: ^2.0.1
   google_sign_in: ^5.2.0
   flutter_facebook_auth: ^5.0.8
+  twitter_login: ^4.3.2
+  cloud_firestore: ^4.5.2
+  get: ^4.6.5
 
 dev_dependencies:
   flutter_test:

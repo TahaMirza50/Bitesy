@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
+import 'package:resturant_review_app/model/user.dart';
+import 'package:resturant_review_app/repository/user_repository.dart';
 import 'package:resturant_review_app/screens/home.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -13,15 +15,18 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  var currentSelectedValue;
+  var currentSelectedGender = "M";
   bool _isObscure1 = true;
   bool _isObscure2 = true;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passController1 = TextEditingController();
   final TextEditingController _passController2 = TextEditingController();
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-
-    static Future<User?> signinUsingEmailPassword({required String email, required String password, required BuildContext context}) async {
+  final subFormKey = GlobalKey<FormState>();
+  
+  static Future<User?> signInUsingEmailPassword({required String email, required String password, required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
     try{
@@ -100,31 +105,6 @@ class _SignUpPageState extends State<SignUpPage> {
                     child: Column(
                   children: [
                         dataField(context),
-                        // TextField(
-                        //   cursorColor: Colors.brown,
-                        //   decoration: const InputDecoration(
-                        //     prefixIcon: Padding(
-                        //       padding: EdgeInsets.all(16),
-                        //       child: Icon(
-                        //         Icons.person,
-                        //         color: Colors.brown,
-                        //       ),
-                        //     ),
-                        //     hintText: "Your Username",
-                        //     contentPadding: EdgeInsets.all(15),
-                        //     border: OutlineInputBorder(
-                        //       borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                        //     ),
-                        //     focusedBorder: OutlineInputBorder(
-                        //         borderRadius:
-                        //             BorderRadius.all(Radius.circular(16.0)),
-                        //         borderSide:
-                        //             BorderSide(color: Colors.brown, width: 2)),
-                        //   ),
-                        //   onChanged: (value) {},
-                        //   keyboardType: TextInputType.emailAddress,
-                        //   textInputAction: TextInputAction.next,
-                        // ),
                     const SizedBox(
                       height: 20,
                     ),
@@ -256,13 +236,23 @@ class _SignUpPageState extends State<SignUpPage> {
                       child: ElevatedButton(
                           onPressed: () async {
                             final isValid = formKey.currentState!.validate();
-                            if(!isValid) return;
-                            User? user = await signinUsingEmailPassword(email: _emailController.text, password: _passController1.text, context: context); 
+                            final subIsValid = subFormKey.currentState!.validate();
+                            if(!isValid || !subIsValid) return;
+                            User? user = await signInUsingEmailPassword(email: _emailController.text, password: _passController1.text, context: context); 
                             if(user!=null){
-                               Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => const LoggedHomePage()),
-                              );
+                              final userModel =UserModel(
+                                firstName: _firstNameController.text.trim(), 
+                                lastName: _lastNameController.text.trim(), 
+                                email: _emailController.text.trim(), 
+                                gender: currentSelectedGender);
+                                Response response = await UserRepository.addUser(userModel);
+                                // if(response.getStatus == 200){
+                                //   SnackBar(content: Text(response.getMessage),duration: const Duration(seconds: 2),);
+                                // }
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const LoggedHomePage()),
+                                );
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -309,61 +299,74 @@ class _SignUpPageState extends State<SignUpPage> {
           children: [
             SizedBox(
               width:200,
-              child: Column(children: [
-                TextField(
-                  cursorColor: Colors.brown,
-                  decoration: const InputDecoration(
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.brown,
+              child: Form(
+                key: subFormKey,
+                child: Column(children: [
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) => value != null && value.isEmpty
+                    ? 'Enter first name.'
+                    : null,
+                    controller: _firstNameController,
+                    cursorColor: Colors.brown,
+                    decoration: const InputDecoration(
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.brown,
+                        ),
                       ),
-                    ),
-                    hintText: "First Name",
-                    contentPadding: EdgeInsets.all(15),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(16.0)),
-                        borderSide:
-                            BorderSide(color: Colors.brown, width: 2)),
-                  ),
-                  onChanged: (value) {},
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                ),
-                const SizedBox(
-                  height: 20,
-                ),
-                TextField(
-                  cursorColor: Colors.brown,
-                  decoration: const InputDecoration(
-                    prefixIcon: Padding(
-                      padding: EdgeInsets.all(16),
-                      child: Icon(
-                        Icons.person,
-                        color: Colors.brown,
+                      hintText: "First Name",
+                      contentPadding: EdgeInsets.all(15),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
                       ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(16.0)),
+                          borderSide:
+                              BorderSide(color: Colors.brown, width: 2)),
                     ),
-                    hintText: "Last Name",
-                    contentPadding: EdgeInsets.all(15),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(16.0)),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                        borderRadius:
-                            BorderRadius.all(Radius.circular(16.0)),
-                        borderSide:
-                            BorderSide(color: Colors.brown, width: 2)),
+                    onChanged: (value) {},
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
                   ),
-                  onChanged: (value) {},
-                  keyboardType: TextInputType.emailAddress,
-                  textInputAction: TextInputAction.next,
-                ),
-              ],),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    autovalidateMode: AutovalidateMode.onUserInteraction,
+                    validator: (value) => value != null && value.isEmpty
+                    ? 'Enter last name.'
+                    : null,
+                    controller: _lastNameController,
+                    cursorColor: Colors.brown,
+                    decoration: const InputDecoration(
+                      prefixIcon: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.brown,
+                        ),
+                      ),
+                      hintText: "Last Name",
+                      contentPadding: EdgeInsets.all(15),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(16.0)),
+                          borderSide:
+                              BorderSide(color: Colors.brown, width: 2)),
+                    ),
+                    onChanged: (value) {},
+                    keyboardType: TextInputType.name,
+                    textInputAction: TextInputAction.next,
+                  ),
+                ],),
+              ),
             ),
             const SizedBox(
               width: 10,
@@ -372,48 +375,51 @@ class _SignUpPageState extends State<SignUpPage> {
               child: Container(
                 height: 55,
                 child: FormField<String>(
-  builder: (FormFieldState<String> state) {
-    return InputDecorator(
-      decoration: InputDecoration(
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Icon( currentSelectedValue == 'F'
-                ? Icons.female_rounded
-                : Icons.male_rounded,
-                    color: Colors.brown,
-     ),
-        ),
-        hintText: "G",
-        contentPadding: const EdgeInsets.all(15),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16.0)),
-        ),
-        focusedBorder: const OutlineInputBorder(
-            borderRadius:
-                  BorderRadius.all(Radius.circular(16.0)),
-            borderSide:
-                  BorderSide(color: Colors.brown, width: 2)),
-      ),
-      isEmpty: currentSelectedValue == null || currentSelectedValue == '',
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: currentSelectedValue,
-          onChanged: (String? newValue) {
-            setState(() {
-                currentSelectedValue = newValue!;
-            });
-          },
-          items: ["M","F"].map((String value) {
-            return DropdownMenuItem<String>(
-                value: value,
-                child: Text(value),
-            );
-          }).toList(),
-        ),
-      ),
-    );
-  },
-),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) => value == "G"
+                  ? 'Select gender.'
+                  : null,
+                  builder: (FormFieldState<String> state) {
+                    return InputDecorator(
+                      decoration: InputDecoration(
+                        prefixIcon: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Icon( currentSelectedGender == 'F'
+                                ? Icons.female_rounded
+                                : Icons.male_rounded,
+                                    color: Colors.brown,
+                                ),
+                        ),
+                        contentPadding: const EdgeInsets.all(15),
+                        border: const OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                        ),
+                        focusedBorder: const OutlineInputBorder(
+                            borderRadius:
+                                  BorderRadius.all(Radius.circular(16.0)),
+                            borderSide:
+                                  BorderSide(color: Colors.brown, width: 2)),
+                      ),
+                      child: DropdownButtonHideUnderline(
+                        child: DropdownButton<String>(
+                          value: currentSelectedGender,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                                currentSelectedGender = newValue!;
+                            });
+                          },
+                          items: ["M","F"].map((String value) {
+                            return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value, style: const TextStyle(
+                                            color: Colors.brown, fontWeight: FontWeight.bold)),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               )
             ),
 
