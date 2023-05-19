@@ -9,7 +9,7 @@ final GoRouter router = GoRouter(
   routes: <GoRoute>[
     GoRoute(
       path: "/",
-      name: "home",
+      name: "start",
       builder: (context, state) => const HomePage(),
     ),
 

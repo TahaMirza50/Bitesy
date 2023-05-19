@@ -1,4 +1,4 @@
-# project
+# Bitesy
 
 A new Flutter project.
 
