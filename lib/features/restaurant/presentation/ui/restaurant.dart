@@ -41,24 +41,29 @@ class _RestaurantPageState extends State<RestaurantPage> {
         body: _buildBody());
   }
 
-  ListView _buildBody() {
-    return ListView(
+  SingleChildScrollView _buildBody() {
+    return SingleChildScrollView(
       controller: _scrollController,
-      children: [
-        Stack(
+      child: Container(
+        child: Column(
           children: [
-            _buildCarousel(),
-            _buildOverlayedContent(),
+            Stack(
+              children: [
+                _buildCarousel(),
+                _buildOverlayedContent(),
+              ],
+            ),
+            const RestaurantReview()
           ],
         ),
-        const RestaurantReview()
-      ],
+      ),
     );
   }
 
   Container _buildOverlayedContent() {
     return Container(
       padding: EdgeInsets.all(16.0),
+      margin: const EdgeInsets.fromLTRB(0, 32, 0, 0),
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -176,9 +181,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
   }
 
   AppBar _buildAppBar() => AppBar(
-        elevation: _showAppBarBackground ? 4.0 : 0,
+        elevation: _showAppBarBackground ? 4.0 : 0.0,
         backgroundColor:
-            _showAppBarBackground ? Colors.white : Color(0x44000000),
+            _showAppBarBackground ? Colors.white : Colors.transparent,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_outlined,
