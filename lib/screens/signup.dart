@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
+import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
 import 'package:resturant_review_app/model/user.dart';
 import 'package:resturant_review_app/repository/user_repository.dart';
 import 'package:resturant_review_app/screens/home.dart';
@@ -251,7 +252,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 // }
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const LoggedHomePage()),
+                                  MaterialPageRoute(builder: (context) => const RestaurantPage()),
                                 );
                             }
                           },

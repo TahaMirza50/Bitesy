@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:resturant_review_app/src/review/Review.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:resturant_review_app/features/restaurant/sections/review/presentation/ui/restaurant_review.dart';
+
 import 'package:resturant_review_app/screens/home.dart';
 import 'package:resturant_review_app/screens/start.dart';
+
+import 'features/restaurant/presentation/ui/restaurant.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -21,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return  MaterialApp(
+      debugShowCheckedModeBanner: false,
     title: 'Bitesy',
     theme: ThemeData(
         primarySwatch: Colors.brown,
@@ -30,7 +34,7 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder:(context,snapshot){
         if(snapshot.hasData){
-          return const LoggedHomePage();
+          return const RestaurantPage();
         } else {
           return const HomePage();
         }

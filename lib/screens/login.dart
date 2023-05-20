@@ -4,6 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
 import 'package:resturant_review_app/screens/home.dart';
 
 class LoginPage extends StatefulWidget {
@@ -199,7 +200,8 @@ class _LoginPageState extends State<LoginPage> {
                               if(user!=null){
                                  Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const LoggedHomePage()),
+                                  MaterialPageRoute(builder: (context) => const RestaurantPage())
+                                  // MaterialPageRoute(builder: (context) => const LoggedHomePage()),
                                 );
                               }
                             },
