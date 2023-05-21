@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:resturant_review_app/screens/home.dart';
 import 'package:resturant_review_app/screens/login.dart';
+import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
 import 'package:resturant_review_app/screens/signup.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:twitter_login/schemes/auth_token.dart';
@@ -251,7 +252,7 @@ class _HomePageState extends State<HomePage> {
                               if(user!=null){
                                  Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const LoggedHomePage()),
+                                  MaterialPageRoute(builder: (context) => const SearchPage()),
                                 );
                               }
                           },
@@ -265,8 +266,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          icon: Image.network(
-                              'http://pngimg.com/uploads/google/google_PNG19635.png'),
+                          icon: Image.asset("assets/images/login_images/google.png",fit: BoxFit.fill,),
                           label: const Text(
                             "Continue with Google",
                             style: TextStyle(
@@ -294,7 +294,7 @@ class _HomePageState extends State<HomePage> {
                               if(user!=null){
                                  Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const LoggedHomePage()),
+                                  MaterialPageRoute(builder: (context) => const SearchPage()),
                                 );
                               }
                           },
@@ -308,8 +308,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          icon: Image.network(
-                              'https://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19754.png'),
+                          icon: Image.asset("assets/images/login_images/facebook.png",fit: BoxFit.fill,),
                           label: const Text(
                             "Continue with Facebook",
                             style: TextStyle(
@@ -337,7 +336,7 @@ class _HomePageState extends State<HomePage> {
                               if(user!=null){
                                  Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const LoggedHomePage()),
+                                  MaterialPageRoute(builder: (context) => const SearchPage()),
                                 );
                               }
                           },
@@ -351,8 +350,7 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          icon: Image.network(
-                              'https://pngimg.com/uploads/twitter/twitter_PNG3.png'),
+                          icon: Image.asset("assets/images/login_images/twitter.png",fit: BoxFit.fill,),  
                           label: const Text(
                             "Continue with Twitter",
                             style: TextStyle(

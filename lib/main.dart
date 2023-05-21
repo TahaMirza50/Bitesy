@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:resturant_review_app/screens/home.dart';
+import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
 import 'package:resturant_review_app/screens/start.dart';
 import 'firebase_options.dart';
 
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder:(context,snapshot){
         if(snapshot.hasData){
-          return const LoggedHomePage();
+          return const SearchPage();
         } else {
           return const HomePage();
         }

@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:resturant_review_app/model/user.dart';
 import 'package:resturant_review_app/repository/user_repository.dart';
 import 'package:resturant_review_app/screens/home.dart';
+import 'package:resturant_review_app/screens/login.dart';
+import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -251,7 +253,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 // }
                                 Navigator.push(
                                   context,
-                                  MaterialPageRoute(builder: (context) => const LoggedHomePage()),
+                                  MaterialPageRoute(builder: (context) => const SearchPage()),
                                 );
                             }
                           },
@@ -277,7 +279,10 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: RichText(
                   text: TextSpan(
                     text: "Already Have an Account?",
-                    recognizer: TapGestureRecognizer()..onTap = () {return context.go('/login');},
+                    recognizer: TapGestureRecognizer()..onTap = () {                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const LoginPage()),
+                                );},
                     style: const TextStyle(
                         color: Colors.grey, fontWeight: FontWeight.bold),
                   ),
