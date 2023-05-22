@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
+import 'package:resturant_review_app/constants/constants.dart';
 import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
 import 'package:resturant_review_app/model/user.dart';
 import 'package:resturant_review_app/repository/user_repository.dart';
@@ -244,6 +245,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             User? user = await signInUsingEmailPassword(email: _emailController.text, password: _passController1.text, context: context); 
                             if(user!=null){
                               final userModel =UserModel(
+                                id : Constants.IDGenerator.v1(),
                                 firstName: _firstNameController.text.trim(), 
                                 lastName: _lastNameController.text.trim(), 
                                 email: _emailController.text.trim(), 
