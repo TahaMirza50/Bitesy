@@ -153,6 +153,8 @@ class _SearchPageState extends State<SearchPage> {
             buildWhen: (previous, current) => current is! SearchPageActionState,
             listener: (context, state) {
               if (state is NavigateToRestaurantPageState) {
+                final navigateState = state as NavigateToRestaurantPageState;
+                print(navigateState.restaurantModel.name);
                 print("pushed");
                 // Navigator.push(
                 //   context,
