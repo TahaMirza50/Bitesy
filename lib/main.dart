@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:resturant_review_app/features/restaurant/sections/review/presentation/ui/restaurant_review.dart';
 
 import 'package:resturant_review_app/screens/home.dart';
+import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
 import 'package:resturant_review_app/screens/start.dart';
 
 import 'features/restaurant/presentation/ui/restaurant.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder:(context,snapshot){
         if(snapshot.hasData){
-          return const RestaurantPage();
+          return const SearchPage();
         } else {
           return const HomePage();
         }
