@@ -5,7 +5,10 @@ abstract class SearchPageEvent {}
 
 class SearchPageInitialEvent extends SearchPageEvent {}
 
-class SearchButtonPressedEvent extends SearchPageEvent {}
+class SearchButtonPressedEvent extends SearchPageEvent {
+  final String restaurantName;
+  SearchButtonPressedEvent(this.restaurantName);
+}
 
 class NavigateToRestaurantPageEvent extends SearchPageEvent {}
 
