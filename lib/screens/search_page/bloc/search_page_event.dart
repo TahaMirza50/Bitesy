@@ -10,5 +10,8 @@ class SearchButtonPressedEvent extends SearchPageEvent {
   SearchButtonPressedEvent(this.restaurantName);
 }
 
-class NavigateToRestaurantPageEvent extends SearchPageEvent {}
+class NavigateToRestaurantPageEvent extends SearchPageEvent {
+  final RestaurantModel restaurantModel;
+  NavigateToRestaurantPageEvent(this.restaurantModel);
+}
 

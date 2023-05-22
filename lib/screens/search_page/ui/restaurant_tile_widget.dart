@@ -14,7 +14,7 @@ class RestaurantTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final int avgRating = double.parse(restaurantModel.avgRating).round();
     return GestureDetector(
-      onTap: () => restaurantBloc.add(NavigateToRestaurantPageEvent()),
+      onTap: () => restaurantBloc.add(NavigateToRestaurantPageEvent(restaurantModel)),
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 8,

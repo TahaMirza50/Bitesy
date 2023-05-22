@@ -45,6 +45,7 @@ class SearchPageBloc extends Bloc<SearchPageEvent, SearchPageState> {
 
   FutureOr<void> navigateToRestaurantPageEvent(
       NavigateToRestaurantPageEvent event, Emitter<SearchPageState> emit) {
-        emit(NavigateToRestaurantPageState());
+
+        emit(NavigateToRestaurantPageState(event.restaurantModel));
       }
 }

@@ -20,4 +20,7 @@ class SearchPageErrorState extends SearchPageState {
   SearchPageErrorState(this.error);
 }
 
-class NavigateToRestaurantPageState extends SearchPageActionState {}
+class NavigateToRestaurantPageState extends SearchPageActionState {
+  final RestaurantModel restaurantModel;
+  NavigateToRestaurantPageState(this.restaurantModel);
+}
