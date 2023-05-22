@@ -2,11 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:resturant_review_app/constants/firebase.dart';
+import 'package:resturant_review_app/constants/constants.dart';
 import 'package:resturant_review_app/model/user.dart';
 
 
-final FirebaseFirestore _firestore = ConnectFirebase.firestore;
+final FirebaseFirestore _firestore = Constants.firestore;
 final CollectionReference _users = _firestore.collection('users');
 
 class Response{
@@ -22,7 +22,7 @@ class UserRepository{
   static Future<Response> addUser(UserModel user) async {
     Response response = Response();
 
-    DocumentReference documentReference = _users.doc();
+    DocumentReference documentReference = _users.doc(user.id);
 
     await documentReference.set(user.toJson()).whenComplete(() {
       response.status = 200;
