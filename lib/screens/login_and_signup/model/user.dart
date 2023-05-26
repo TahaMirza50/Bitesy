@@ -25,4 +25,14 @@ class UserModel{
       'Role': role 
     };
   }
+
+    static UserModel fromJson(Map<String, dynamic> json) {
+    return UserModel(
+            id: json['ID'] as String? ?? "field empty" ,
+            firstName: json['First Name'] as String? ?? "field empty",
+            lastName: json['Last Name'] as String? ?? "field empty",
+            email: json['email'] as String? ?? "field empty",
+            gender: json['Gender'] as String? ?? "field empty",
+            role: json['Role'] as String? ?? "field empty");
+  }
 }

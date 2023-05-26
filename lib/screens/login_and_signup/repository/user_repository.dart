@@ -9,18 +9,20 @@ import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
 final FirebaseFirestore _firestore = Constants.firestore;
 final CollectionReference _users = _firestore.collection('users');
 
-class Response{
+class ResponseUser{
   int status;
   String message;
-  Response({this.status = 0, this.message = ""});
+  UserModel user;
+  ResponseUser({this.status = 0, this.message = "",required this.user});
   int get getStatus => status;
   String get getMessage => message;
 }
 
 class UserRepository{
   
-  static Future<Response> addUser(UserModel user) async {
-    Response response = Response();
+  static Future<ResponseUser> addUser(UserModel user) async {
+    
+    ResponseUser response = ResponseUser(user: user);
 
     DocumentReference documentReference = _users.doc(user.id);
 
@@ -44,6 +46,44 @@ class UserRepository{
     //       backgroundColor: Colors.brown,
     //       colorText: Colors.white);
     // });
+  }
+
+  static Future<ResponseUser> fetchUserByEmail(String email) async{
+
+    ResponseUser response = ResponseUser(user: UserModel(
+      id: "",
+      firstName: "",
+      email: "",
+      lastName: "",
+      gender: "",
+      role: "",
+    ));
+    try{
+
+      QuerySnapshot snapshot = await _users.get();
+
+      if(snapshot.size > 0){
+
+        for(QueryDocumentSnapshot document in snapshot.docs){
+
+          Map<String, dynamic>? documentData = document.data() as Map<String, dynamic>?;
+
+          String documentEmail = (documentData!['email'] as String).toLowerCase();
+          
+          if(documentEmail == email.toLowerCase()){
+            UserModel user = UserModel.fromJson(documentData);
+            response.user = user;
+            response.status = 200;
+            response.message = "User read successfully";
+
+          }
+        }
+      }
+    } catch(error) {  
+      response.status = 400;
+      response.message = error.toString();
+    }
+    return response;
   }
 
 }
