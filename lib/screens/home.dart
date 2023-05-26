@@ -6,8 +6,8 @@ import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:resturant_review_app/router/app_router.dart';
-import 'package:resturant_review_app/screens/login.dart';
-import 'package:resturant_review_app/screens/signup.dart';
+import 'package:resturant_review_app/screens/login_and_signup/ui/login.dart';
+import 'package:resturant_review_app/screens/login_and_signup/ui/signup.dart';
 import 'package:resturant_review_app/screens/start.dart';
 
 class LoggedHomePage extends StatefulWidget {

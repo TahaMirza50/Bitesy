@@ -23,7 +23,7 @@ class SearchPageBloc extends Bloc<SearchPageEvent, SearchPageState> {
 
     final Response response = await RestaurantRepository.fetchRestaurantList();
     if (response.status == 200) {
-      emit(SearchPageSuccessState(RestaurantRepository.restaurantsList));
+      emit(SearchPageSuccessState(response.restaurantsList));
     } else {
       emit(SearchPageErrorState(response.message));
     }
@@ -37,7 +37,7 @@ class SearchPageBloc extends Bloc<SearchPageEvent, SearchPageState> {
     final Response response =
         await RestaurantRepository.fetchRestaurantByName(event.restaurantName);
     if (response.status == 200) {
-      emit(SearchPageSuccessState(RestaurantRepository.restaurantsList));
+      emit(SearchPageSuccessState(response.restaurantsList));
     } else {
       emit(SearchPageErrorState(response.message));
     }
@@ -45,6 +45,7 @@ class SearchPageBloc extends Bloc<SearchPageEvent, SearchPageState> {
 
   FutureOr<void> navigateToRestaurantPageEvent(
       NavigateToRestaurantPageEvent event, Emitter<SearchPageState> emit) {
-        emit(NavigateToRestaurantPageState());
-      }
+    emit(NavigateToRestaurantPageState(event.restaurantModel));
+  }
+
 }
