@@ -9,20 +9,21 @@ final CollectionReference _restaurants = _firestore.collection('restaurant');
 class Response {
   int status;
   String message;
-  Response({this.status = 0, this.message = ""});
+  List<RestaurantModel> restaurantsList;
+  Response({this.status = 0, this.message = "", required this.restaurantsList});
   int get getStatus => status;
   String get getMessage => message;
 }
 
 class RestaurantRepository {
-  static List<RestaurantModel> restaurantsList = [];
 
   // Future<List<RestaurantModel>> getList() => Future.value(restaurantsList);
 
   static Future<Response> fetchRestaurantList() async {
 
-    restaurantsList = [];
-    Response response = Response();
+    List<RestaurantModel> restaurantsList = [];
+
+    Response response = Response(restaurantsList: restaurantsList);
     try {
       QuerySnapshot snapshot = await _restaurants.get();
 
@@ -30,7 +31,7 @@ class RestaurantRepository {
         for (QueryDocumentSnapshot document in snapshot.docs) {
           Map<String, dynamic>? documentData =
               document.data() as Map<String, dynamic>?;
-          restaurantsList.add(RestaurantModel.fromJson(documentData!));
+          response.restaurantsList.add(RestaurantModel.fromJson(documentData!));
         }
       }
       response.status = 200;
@@ -39,6 +40,8 @@ class RestaurantRepository {
       response.status = 400;
       response.message = error.toString();
     }
+
+    print(response.message);
 
     // await _restaurants.get().then((event) {
     //   restaurantsList = event.docs
@@ -54,10 +57,10 @@ class RestaurantRepository {
   }
 
   static Future<Response> fetchRestaurantByName(String name) async{
-    
-    restaurantsList = [];
 
-    Response response = Response();
+        List<RestaurantModel> restaurantsList = [];
+
+    Response response = Response(restaurantsList: restaurantsList);
 
         try {
       QuerySnapshot snapshot = await _restaurants.get();
@@ -68,7 +71,7 @@ class RestaurantRepository {
               document.data() as Map<String, dynamic>?;
           String documentName = (documentData!['name'] as String).toLowerCase();
           if (documentName.contains(name.toLowerCase())) {
-          restaurantsList.add(RestaurantModel.fromJson(documentData));
+          response.restaurantsList.add(RestaurantModel.fromJson(documentData));
         }
         }
       }

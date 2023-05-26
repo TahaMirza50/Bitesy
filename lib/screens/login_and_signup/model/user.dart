@@ -4,13 +4,15 @@ class UserModel{
   final String lastName;
   final String email;
   final String gender;
+  final String role;
 
   UserModel({
     required this.id,
     required this.firstName,
     required this.lastName,
     required this.email,
-    required this.gender
+    required this.gender,
+    required this.role,
   });
 
   toJson(){
@@ -19,7 +21,8 @@ class UserModel{
       'First Name' : firstName,
       'Last Name' : lastName,
       'Email': email,
-      'Gender': gender 
+      'Gender': gender,
+      'Role': role 
     };
   }
 }

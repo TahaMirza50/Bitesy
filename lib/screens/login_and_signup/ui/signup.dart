@@ -5,10 +5,10 @@ import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
 import 'package:resturant_review_app/constants/constants.dart';
 import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
-import 'package:resturant_review_app/model/user.dart';
-import 'package:resturant_review_app/repository/user_repository.dart';
+import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
+import 'package:resturant_review_app/screens/login_and_signup/repository/user_repository.dart';
 import 'package:resturant_review_app/screens/home.dart';
-import 'package:resturant_review_app/screens/login.dart';
+import 'package:resturant_review_app/screens/login_and_signup/ui/login.dart';
 import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -265,17 +265,45 @@ class _SignUpPageState extends State<SignUpPage> {
                                   firstName: _firstNameController.text.trim(),
                                   lastName: _lastNameController.text.trim(),
                                   email: _emailController.text.trim(),
-                                  gender: currentSelectedGender);
+                                  gender: currentSelectedGender,
+                                  role: 'user');
                               Response response =
                                   await UserRepository.addUser(userModel);
-                              // if(response.getStatus == 200){
-                              //   SnackBar(content: Text(response.getMessage),duration: const Duration(seconds: 2),);
-                              // }
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const SearchPage()),
-                              );
+                              if (response.getStatus == 200) {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (BuildContext context) {
+                                    return ClipRRect(
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(16.0)),
+                                      child: AlertDialog(
+                                        title: const Text(
+                                          "Error",
+                                          style: TextStyle(
+                                              color: Colors.brown,
+                                              fontWeight: FontWeight.bold),
+                                        ),
+                                        content: Text(response.getMessage),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop();
+                                            },
+                                            child: const Text("OK"),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => const SearchPage()),
+                                );
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -302,8 +330,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     text: "Already Have an Account?",
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.pop(context);
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const LoginPage()),
