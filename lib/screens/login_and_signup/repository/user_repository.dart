@@ -50,7 +50,7 @@ class UserRepository {
         user: UserModel(
       id: "",
       firstName: "",
-      email: "",
+      email: email,
       lastName: "",
       gender: "",
       role: "",
