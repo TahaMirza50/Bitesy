@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
 import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
-import 'package:resturant_review_app/screens/signup.dart';
+import 'package:resturant_review_app/screens/login_and_signup/ui/signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -210,6 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                                 email: _emailController.text,
                                 password: _passController.text,
                                 context: context);
+                                
                             if (user != null) {
                               Navigator.push(
                                 context,
@@ -242,8 +243,7 @@ class _LoginPageState extends State<LoginPage> {
                     text: "Don't Have Account?",
                     recognizer: TapGestureRecognizer()
                       ..onTap = () {
-                        Navigator.pop(context);
-                        Navigator.push(
+                        Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const SignUpPage()),

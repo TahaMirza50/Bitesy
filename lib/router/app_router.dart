@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:resturant_review_app/screens/login.dart';
-import 'package:resturant_review_app/screens/signup.dart';
+import 'package:resturant_review_app/screens/login_and_signup/ui/login.dart';
+import 'package:resturant_review_app/screens/login_and_signup/ui/signup.dart';
 import 'package:resturant_review_app/screens/start.dart';
 
 

@@ -14,14 +14,23 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> {
+  bool search = false;
   final TextEditingController _restaurantName = TextEditingController();
+  SearchPageBloc searchPageBloc = SearchPageBloc();
+
   @override
   void initState() {
+    searchPageBloc = SearchPageBloc();
     searchPageBloc.add(SearchPageInitialEvent());
     super.initState();
   }
 
-  final SearchPageBloc searchPageBloc = SearchPageBloc();
+  @override
+  void dispose() {
+    searchPageBloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,6 +51,7 @@ class _SearchPageState extends State<SearchPage> {
                   FacebookAuth.instance.logOut();
                   GoogleSignIn().disconnect();
                   FirebaseAuth.instance.signOut().then((value) => {
+                        search = false,
                         Navigator.popUntil(
                           context,
                           ModalRoute.withName('/'),
@@ -62,12 +72,12 @@ class _SearchPageState extends State<SearchPage> {
           ),
         ),
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(200.0),
+          preferredSize: const Size.fromHeight(220.0),
           child: SafeArea(
               child: Container(
                   child: AppBar(
             flexibleSpace: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 40, horizontal: 30),
+              padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -87,6 +97,7 @@ class _SearchPageState extends State<SearchPage> {
                         color: Colors.brown,
                         onPressed: () {
                           if (_restaurantName.text.isNotEmpty) {
+                            search = true;
                             searchPageBloc.add(
                                 SearchButtonPressedEvent(_restaurantName.text));
                           }
@@ -106,8 +117,11 @@ class _SearchPageState extends State<SearchPage> {
                     decoration: InputDecoration(
                         suffixIcon: IconButton(
                           onPressed: () {
-                            _restaurantName.clear();
-                            searchPageBloc.add(SearchPageInitialEvent());
+                            if (search) {
+                              search = false;
+                              _restaurantName.clear();
+                              searchPageBloc.add(SearchPageInitialEvent());
+                            }
                           },
                           icon: Icon(Icons.clear),
                         ),
