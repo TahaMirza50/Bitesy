@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:math';
 
 import 'package:bloc/bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
+import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
+import 'package:resturant_review_app/screens/login_and_signup/repository/user_repository.dart';
 import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
 import 'package:resturant_review_app/screens/search_page/repository/restaurant_repo.dart';
 
@@ -21,9 +24,14 @@ class SearchPageBloc extends Bloc<SearchPageEvent, SearchPageState> {
     emit(SearchPageLoadingState());
     await Future.delayed(const Duration(seconds: 2));
 
+    final ResponseUser responseUser = await UserRepository.fetchUserByEmail(
+        FirebaseAuth.instance.currentUser!.email.toString());
+
     final Response response = await RestaurantRepository.fetchRestaurantList();
-    if (response.status == 200) {
-      emit(SearchPageSuccessState(response.restaurantsList));
+
+    if (response.status == 200 && responseUser.status == 200) {
+      emit(
+          SearchPageSuccessState(response.restaurantsList, responseUser.user));
     } else {
       emit(SearchPageErrorState(response.message));
     }
@@ -36,8 +44,11 @@ class SearchPageBloc extends Bloc<SearchPageEvent, SearchPageState> {
 
     final Response response =
         await RestaurantRepository.fetchRestaurantByName(event.restaurantName);
-    if (response.status == 200) {
-      emit(SearchPageSuccessState(response.restaurantsList));
+
+    final ResponseUser responseUser = await UserRepository.fetchUserByEmail(
+        FirebaseAuth.instance.currentUser!.email.toString());
+    if (response.status == 200 && responseUser.status == 200) {
+      emit(SearchPageSuccessState(response.restaurantsList,responseUser.user));
     } else {
       emit(SearchPageErrorState(response.message));
     }
@@ -47,5 +58,4 @@ class SearchPageBloc extends Bloc<SearchPageEvent, SearchPageState> {
       NavigateToRestaurantPageEvent event, Emitter<SearchPageState> emit) {
     emit(NavigateToRestaurantPageState(event.restaurantModel));
   }
-
 }

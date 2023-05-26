@@ -5,23 +5,20 @@ import 'package:get/get.dart';
 import 'package:resturant_review_app/constants/constants.dart';
 import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
 
-
 final FirebaseFirestore _firestore = Constants.firestore;
 final CollectionReference _users = _firestore.collection('users');
 
-class ResponseUser{
+class ResponseUser {
   int status;
   String message;
   UserModel user;
-  ResponseUser({this.status = 0, this.message = "",required this.user});
+  ResponseUser({this.status = 0, this.message = "", required this.user});
   int get getStatus => status;
   String get getMessage => message;
 }
 
-class UserRepository{
-  
+class UserRepository {
   static Future<ResponseUser> addUser(UserModel user) async {
-    
     ResponseUser response = ResponseUser(user: user);
 
     DocumentReference documentReference = _users.doc(user.id);
@@ -29,28 +26,28 @@ class UserRepository{
     await documentReference.set(user.toJson()).whenComplete(() {
       response.status = 200;
       response.message = "User added successfully";
-    }).catchError((e){
+    }).catchError((e) {
       response.status = 400;
       response.message = "Something went wrong";
-    }); 
+    });
 
     return response;
     // await FirebaseFirestore.instance.collection("users").add(user.toJson()).whenComplete(
     //   () => Get.snackbar("Success", "Your account has been created.",
     //       snackPosition: SnackPosition.BOTTOM,
     //       backgroundColor: Colors.brown,
-    //       colorText: Colors.white) 
+    //       colorText: Colors.white)
     // ).catchError((error,stackTrace){
-    //   Get.snackbar("OOPS!", "Something went wrong.", 
+    //   Get.snackbar("OOPS!", "Something went wrong.",
     //       snackPosition: SnackPosition.BOTTOM,
     //       backgroundColor: Colors.brown,
     //       colorText: Colors.white);
     // });
   }
 
-  static Future<ResponseUser> fetchUserByEmail(String email) async{
-
-    ResponseUser response = ResponseUser(user: UserModel(
+  static Future<ResponseUser> fetchUserByEmail(String email) async {
+    ResponseUser response = ResponseUser(
+        user: UserModel(
       id: "",
       firstName: "",
       email: "",
@@ -58,32 +55,28 @@ class UserRepository{
       gender: "",
       role: "",
     ));
-    try{
+    try {
+      QuerySnapshot snapshot = await _users
+          .where('Email',
+              isEqualTo:
+                  email) // Replace 'field' and 'value' with your desired condition
+          .limit(1)
+          .get();
 
-      QuerySnapshot snapshot = await _users.get();
-
-      if(snapshot.size > 0){
-
-        for(QueryDocumentSnapshot document in snapshot.docs){
-
-          Map<String, dynamic>? documentData = document.data() as Map<String, dynamic>?;
-
-          String documentEmail = (documentData!['email'] as String).toLowerCase();
-          
-          if(documentEmail == email.toLowerCase()){
-            UserModel user = UserModel.fromJson(documentData);
-            response.user = user;
-            response.status = 200;
-            response.message = "User read successfully";
-
-          }
-        }
+      if (snapshot.size > 0) {
+        UserModel user =
+            UserModel.fromJson(snapshot.docs[0].data() as Map<String, dynamic>);
+        response.user = user;
+        response.status = 200;
+        response.message = "User read successfully";
+      } else {
+        response.status = 200;
+        response.message = "User not found."; // No matching documents found
       }
-    } catch(error) {  
+    } catch (error) {
       response.status = 400;
       response.message = error.toString();
     }
     return response;
   }
-
 }
