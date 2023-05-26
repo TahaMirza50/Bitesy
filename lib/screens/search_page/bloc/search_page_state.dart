@@ -12,7 +12,8 @@ class SearchPageLoadingState extends SearchPageState {}
 
 class SearchPageSuccessState extends SearchPageState {
   final List<RestaurantModel> restaurants;
-  SearchPageSuccessState(this.restaurants);
+  final UserModel userModel;
+  SearchPageSuccessState(this.restaurants,this.userModel);
 }
 
 class SearchPageErrorState extends SearchPageState {
