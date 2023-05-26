@@ -41,18 +41,6 @@ class RestaurantRepository {
       response.message = error.toString();
     }
 
-    print(response.message);
-
-    // await _restaurants.get().then((event) {
-    //   restaurantsList = event.docs
-    //       .map((doc) => RestaurantModel.fromJson(doc.data()))
-    //       .toList();
-
-    // }).onError((error, stackTrace) {
-    //   response.status = 400;
-    //   response.message = "Something went wrong";
-    // });
-
     return response;
   }
 

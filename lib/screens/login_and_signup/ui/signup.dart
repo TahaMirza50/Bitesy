@@ -267,9 +267,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                   email: _emailController.text.trim(),
                                   gender: currentSelectedGender,
                                   role: 'user');
-                              Response response =
+                              ResponseUser response =
                                   await UserRepository.addUser(userModel);
-                              if (response.getStatus == 200) {
+                              if (response.getStatus == 400) {
                                 showDialog(
                                   context: context,
                                   barrierDismissible: false,
