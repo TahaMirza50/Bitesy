@@ -188,72 +188,193 @@ class _SearchPageState extends State<SearchPage> {
 
   Drawer _buildDrawer(context, state) {
     if (state is SearchPageSuccessState) {
-      return Drawer(
-        backgroundColor: Colors.brown,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            const DrawerHeader(
-              child: Text('Drawer Header'),
-              decoration: BoxDecoration(
-                color: Colors.white,
+      final UserModel userModel = state.userModel;
+      if (userModel.role == 'admin') {
+        return Drawer(
+          backgroundColor: Colors.brown,
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 200,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 40,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "${userModel.firstName} ${userModel.lastName}",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        userModel.email,
+                        style: const TextStyle(color: Colors.brown),
+                      ),
+                    ],
+                  ),
+                ),
               ),
-            ),
-            ListTile(
-              title: const Text('Log Out'),
-              onTap: () async {
-                FacebookAuth.instance.logOut();
-                GoogleSignIn().disconnect();
-                FirebaseAuth.instance.signOut().then((value) => {
-                      search = false,
-                      Navigator.popUntil(
-                        context,
-                        ModalRoute.withName('/'),
-                      )
-                    });
-              },
-            ),
-          ],
-        ),
-      );
+              ListTile(
+                leading: const Icon(Icons.dashboard, color: Colors.white),
+                title: const Text('Admin Dashboard',
+                    style: TextStyle(color: Colors.white)),
+                onTap: () {},
+              ),
+              const Spacer(),
+              const Divider(color: Colors.white, thickness: 1),
+              ListTile(
+                leading: const Icon(Icons.exit_to_app, color: Colors.white),
+                title: const Text('Log Out',
+                    style: TextStyle(color: Colors.white)),
+                onTap: () async {
+                  FacebookAuth.instance.logOut();
+                  GoogleSignIn().disconnect();
+                  FirebaseAuth.instance.signOut().then((value) => {
+                        search = false,
+                        Navigator.popUntil(
+                          context,
+                          ModalRoute.withName('/'),
+                        )
+                      });
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              )
+            ],
+          ),
+        );
+      }
+              return Drawer(
+          backgroundColor: Colors.brown,
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 200,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 40,
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "${userModel.firstName} ${userModel.lastName}",
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        userModel.email,
+                        style: const TextStyle(color: Colors.brown),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Spacer(),
+              const Divider(color: Colors.white, thickness: 1),
+              ListTile(
+                leading: const Icon(Icons.exit_to_app, color: Colors.white),
+                title: const Text('Log Out',
+                    style: TextStyle(color: Colors.white)),
+                onTap: () async {
+                  FacebookAuth.instance.logOut();
+                  GoogleSignIn().disconnect();
+                  FirebaseAuth.instance.signOut().then((value) => {
+                        search = false,
+                        Navigator.popUntil(
+                          context,
+                          ModalRoute.withName('/'),
+                        )
+                      });
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              )
+            ],
+          ),
+        );
     }
 
-    return Drawer(
-      backgroundColor: Colors.brown,
-      child: ListView(
-        padding: EdgeInsets.zero,
-        children: <Widget>[
-          const DrawerHeader(
-            child: Text('Drawer Header'),
-            decoration: BoxDecoration(
-              color: Colors.white,
-            ),
+            return Drawer(
+          backgroundColor: Colors.brown,
+          child: Column(
+            children: <Widget>[
+              Container(
+                height: 200,
+                width: double.infinity,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      CircleAvatar(
+                        backgroundColor: Colors.black,
+                        radius: 40,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        "No Name",
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        "No Email",
+                        style: TextStyle(color: Colors.brown),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const Spacer(),
+              const Divider(color: Colors.white, thickness: 1),
+              ListTile(
+                leading: const Icon(Icons.exit_to_app, color: Colors.white),
+                title: const Text('Log Out',
+                    style: TextStyle(color: Colors.white)),
+                onTap: () async {
+                  FacebookAuth.instance.logOut();
+                  GoogleSignIn().disconnect();
+                  FirebaseAuth.instance.signOut().then((value) => {
+                        search = false,
+                        Navigator.popUntil(
+                          context,
+                          ModalRoute.withName('/'),
+                        )
+                      });
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              )
+            ],
           ),
-          ListTile(
-            title: const Text('Log Out'),
-            onTap: () async {
-              FacebookAuth.instance.logOut();
-              GoogleSignIn().disconnect();
-              FirebaseAuth.instance.signOut().then((value) => {
-                    search = false,
-                    Navigator.popUntil(
-                      context,
-                      ModalRoute.withName('/'),
-                    )
-                  });
-            },
-          ),
-          ListTile(
-            title: const Text('Item 2'),
-            onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
-            },
-          ),
-        ],
-      ),
-    );
+        );
   }
 }
