@@ -9,6 +9,16 @@ class ReviewCard extends StatelessWidget {
 
   const ReviewCard({super.key, required this.review});
 
+  void shareContent() async {
+  try {
+    await Share.share("Check out this review: ${review.review}");
+    
+    print('Share completed successfully.');
+  } catch (e) {
+    print('Error sharing: $e');
+  }
+}
+
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
@@ -155,10 +165,7 @@ class ReviewCard extends StatelessWidget {
           label: const Text('Funny'),
         ),
         OutlinedButton.icon(
-          onPressed: () async {
-            await Share.shareXFiles([XFile("assets/images/menu_images/manu.webp")],
-                text: 'Hello Hardees Restaurant');
-          },
+          onPressed: shareContent,
           icon: const Icon(Icons.share_outlined),
           label: const Text('Share'),
         ),

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:resturant_review_app/features/restaurant/sections/info/presentation/ui/restaurant_info.dart';
 import 'package:resturant_review_app/features/restaurant/sections/menu/presentation/ui/restaurant_menu.dart';
@@ -30,6 +32,22 @@ class _RestaurantPageState extends State<RestaurantPage> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  void shareContent() async {
+    try {
+      await Share.share(
+          '''Check out this restaurant: ${widget.restaurantModel.name}\n'''
+          '''Website: ${widget.restaurantModel.website}\n'''
+          '''Phone: ${widget.restaurantModel.phoneNum}\n'''
+          '''Website: ${widget.restaurantModel.website}\n'''
+          '''Address: ${widget.restaurantModel.address}\n'''
+          '''Rating: ${double.parse(widget.restaurantModel.avgRating).toStringAsFixed(1)}\n''');
+
+      print('Share completed successfully.');
+    } catch (e) {
+      print('Error sharing: $e');
+    }
   }
 
   void _onScroll() {
@@ -80,24 +98,49 @@ class _RestaurantPageState extends State<RestaurantPage> {
                   // an array of icon button call with text label call and a circular background in grey color
 
                   _buildIconButton(
-                    icon: Icons.call_outlined,
-                    label: 'Call',
-                  ),
+                      icon: Icons.call_outlined,
+                      label: 'Call',
+                      onTap: () async {
+                        final call = Uri.parse(
+                            'tel:+${widget.restaurantModel.phoneNum}');
+                        if (await canLaunchUrl(call)) {
+                          launchUrl(call);
+                        } else {
+                          throw 'Could not launch $call';
+                        }
+                      }),
                   const SizedBox(width: 8),
                   _buildIconButton(
-                    icon: Icons.map_outlined,
-                    label: 'Map',
-                  ),
+                      icon: Icons.map_outlined,
+                      label: 'Map',
+                      onTap: () async {
+                        final uri = Uri.parse(
+                            'google.navigation:q=${widget.restaurantModel.latitude},${widget.restaurantModel.longitude}&mode=d');
+                        if (await canLaunchUrl(uri)) {
+                          await launchUrl(uri);
+                        } else {
+                          throw 'Could not open Google Maps';
+                        }
+                      }),
                   const SizedBox(width: 8),
 
                   _buildIconButton(
-                    icon: Icons.link_outlined,
-                    label: 'Web',
-                  ),
+                      icon: Icons.link_outlined,
+                      label: 'Web',
+                      onTap: () async {
+                        final Uri url =
+                            Uri.parse(widget.restaurantModel.website);
+                        print("Hello world");
+                        if (await canLaunchUrl(url)) {
+                          launchUrl(url);
+                        } else {
+                          throw 'Could not launch $url';
+                        }
+                      }),
                 ],
               ),
             ),
-            const RestaurantMenu(),
+            RestaurantMenu(restaurantModel: widget.restaurantModel),
             RestaurantInfo(restaurantModel: widget.restaurantModel),
             RestaurantReview(restaurantModel: widget.restaurantModel)
           ],
@@ -110,34 +153,38 @@ class _RestaurantPageState extends State<RestaurantPage> {
   Widget _buildIconButton({
     required IconData icon,
     required String label,
+    required Future<void> Function() onTap,
   }) {
     // icon button with grey circular background
-    return Column(
-      children: [
-        Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.brown[200],
-            borderRadius: BorderRadius.circular(40),
+    return InkWell(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.brown[200],
+              borderRadius: BorderRadius.circular(40),
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(icon, color: Colors.grey[900], size: 24),
+              ],
+            ),
           ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: Colors.grey[900], size: 24),
-            ],
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: Colors.grey[700],
+            ),
           ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w800,
-            color: Colors.grey[700],
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -150,7 +197,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Cusines Of Nepal',
+            widget.restaurantModel.name,
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.w900,
@@ -164,7 +211,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 Star(width: 25, height: 25, color: Colors.amber, starSize: 20),
               SizedBox(width: 4),
               Text(
-                '3.9',
+                double.parse(widget.restaurantModel.avgRating)
+                    .toStringAsFixed(1),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
@@ -173,7 +221,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
               ),
               SizedBox(width: 4),
               Text(
-                '(2,394 reviews)',
+                '(${widget.restaurantModel.numReviews} reviews)',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
@@ -280,20 +328,23 @@ class _RestaurantPageState extends State<RestaurantPage> {
               Icons.share,
               color: _showAppBarBackground ? Colors.black : Colors.white,
             ),
-            onPressed: () {},
+            onPressed: shareContent,
           ),
-          IconButton(
-            icon: Icon(
-              Icons.favorite_border,
-              color: _showAppBarBackground ? Colors.black : Colors.white,
-            ),
-            onPressed: () {},
-          ),
+          // IconButton(
+          //   icon: Icon(
+          //     Icons.favorite_border,
+          //     color: _showAppBarBackground ? Colors.black : Colors.white,
+          //   ),
+          //   onPressed: () {},
+          // ),
         ],
         title: _showAppBarBackground
             ? Text(
-                'Cusines Of Nepal',
-                style: TextStyle(color: Colors.black),
+                widget.restaurantModel.name,
+                style: TextStyle(
+                    color: Color.fromARGB(255, 122, 102, 95),
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
               )
             : null,
       );

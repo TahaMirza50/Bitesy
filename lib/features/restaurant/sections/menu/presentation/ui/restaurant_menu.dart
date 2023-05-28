@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../screens/search_page/model/restaurant_model.dart';
 import '../../../../widgets/header_text.dart';
 
 class RestaurantMenu extends StatelessWidget {
-  const RestaurantMenu({super.key});
+  final RestaurantModel restaurantModel;
+  const RestaurantMenu({super.key, required this.restaurantModel});
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +30,21 @@ class RestaurantMenu extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(8.0),
                               ),
                               child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      Container(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(0.0)),
-                          child: Image.asset(
-                            "assets/images/menu_images/manu.webp",
-                            fit: BoxFit.cover,
-                            height: 400.0,
-                          ),
-                        ),
-                      )
-                    ]
-                  ),
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Container(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(0.0)),
+                                        child: Image.asset(
+                                          restaurantModel.menu,
+                                          fit: BoxFit.cover,
+                                          height: 400.0,
+                                        ),
+                                      ),
+                                    )
+                                  ]),
                             ),
                           ),
                         ],

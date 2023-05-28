@@ -43,12 +43,12 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
             const SizedBox(height: 24),
             _buildInfoTab(
                 header: "Website",
-                subheader: "www.gooogle.com",
+                subheader: widget.restaurantModel.website,
                 icon: Icons.link_outlined),
             const SizedBox(height: 24),
             _buildInfoTab(
                 header: "Call",
-                subheader: "679-4354-679",
+                subheader: '+${widget.restaurantModel.phoneNum}',
                 icon: Icons.call_outlined),
             const SizedBox(height: 24),
             _buildGoogleMaps(),
@@ -134,20 +134,20 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         HeaderText(
-            header: "3251 20th Ave",
+            header: widget.restaurantModel.address,
             textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
         const SizedBox(height: 2),
-        HeaderText(
-            header: "Space 164",
-            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 2),
-        HeaderText(
-            header: "Stonestown",
-            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
-        const SizedBox(height: 2),
-        HeaderText(
-            header: "San Fransisco, CA",
-            textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        // HeaderText(
+        //     header: "Space 164",
+        //     textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        // const SizedBox(height: 2),
+        // HeaderText(
+        //     header: "Stonestown",
+        //     textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
+        // const SizedBox(height: 2),
+        // HeaderText(
+        //     header: "San Fransisco, CA",
+        //     textStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.w700)),
         const SizedBox(height: 2),
       ],
     );

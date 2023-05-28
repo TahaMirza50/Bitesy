@@ -30,6 +30,7 @@ class _WriteAReviewState extends State<WriteAReview> {
   @override
   Widget build(BuildContext context) {
     TextEditingController textarea = TextEditingController();
+    final formKey = GlobalKey<FormState>();
 
     return Scaffold(
       body: BlocConsumer<WriteAReviewBloc, WriteAReviewState>(
@@ -54,15 +55,15 @@ class _WriteAReviewState extends State<WriteAReview> {
             case WriteAReviewErrorState:
               return const Center(child: Text("Error"));
             default:
-              return _buildBody(context, textarea);
+              return _buildBody(context, textarea, formKey);
           }
         },
       ),
     );
   }
 
-  SingleChildScrollView _buildBody(
-      BuildContext context, TextEditingController textarea) {
+  SingleChildScrollView _buildBody(BuildContext context,
+      TextEditingController textarea, GlobalKey<FormState> formKey) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,7 +82,7 @@ class _WriteAReviewState extends State<WriteAReview> {
                     const SizedBox(height: 6),
                     _buildReviewGuidelines(),
                     const SizedBox(height: 16),
-                    _buildReviewTextArea(textarea),
+                    _buildReviewTextArea(textarea, formKey),
                     const SizedBox(height: 16),
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 2,
@@ -159,62 +160,36 @@ class _WriteAReviewState extends State<WriteAReview> {
     );
   }
 
-  TextField _buildReviewTextArea(TextEditingController textarea) {
-    return TextField(
-      controller: textarea,
-      keyboardType: TextInputType.multiline,
-      maxLines: 20,
-      cursorColor: Colors.grey[800]!,
-      decoration: InputDecoration(
-          hintText: "Enter Remarks",
-          border: OutlineInputBorder(
-              borderSide: BorderSide(width: 0, color: Colors.grey[800]!),
-              borderRadius: BorderRadius.circular(10)),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(width: 0, color: Colors.grey[800]!))),
+  Form _buildReviewTextArea(
+      TextEditingController textarea, GlobalKey<FormState> formKey) {
+    return Form(
+      key: formKey,
+      child: TextFormField(
+          maxLines: 20,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          controller: textarea,
+          cursorColor: Colors.brown,
+          decoration: InputDecoration(
+            hintText: "Enter Remarks",
+            contentPadding: const EdgeInsets.all(15),
+            border: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(16.0)),
+            ),
+            focusedBorder: const OutlineInputBorder(
+                borderRadius: BorderRadius.all(Radius.circular(16.0)),
+                borderSide: BorderSide(color: Colors.grey, width: 2)),
+          ),
+          onChanged: (value) {},
+          keyboardType: TextInputType.multiline,
+          textInputAction: TextInputAction.done,
+          validator: (value) {
+            if (value == null || value.isEmpty) {
+              return 'Please enter some text';
+            }
+            return null;
+          }),
     );
   }
-
-  // SizedBox _buildPostReviewButton(
-  //     BuildContext context, TextEditingController textarea) {
-  //   return SizedBox(
-  //     width: MediaQuery.of(context).size.width / 2,
-  //     child: ElevatedButton(
-  //       onPressed: () {
-  //         print("post review");
-  //         writeAReviewBloc.add(PostReviewEvent(
-  //             // numReviews: widget.restaurantModel.numReviews,
-  //             // avgRating: widget.restaurantModel.avgRating,
-  //             // restaurantId: widget.restaurantModel.id,
-  //             // avatar: "https://www.woolha.com/media/2020/03/eevee.png",
-  //             // rating: starsSelected,
-  //             // review: textarea.text,
-  //             // userId: FirebaseAuth.instance.currentUser!.uid,
-  //             // userName: FirebaseAuth.instance.currentUser!.displayName!,
-
-  //             )
-
-  //         );
-  //       },
-  //       style: ElevatedButton.styleFrom(
-  //         textStyle: const TextStyle(
-  //           fontSize: 16,
-  //           fontWeight: FontWeight.bold,
-  //         ),
-  //         minimumSize: const Size(200, 50),
-  //         shadowColor: Colors.grey,
-  //         elevation: 5,
-  //         backgroundColor: Colors.red[600],
-  //         side: const BorderSide(
-  //             color: Colors.transparent, width: 2, style: BorderStyle.solid),
-  //         shape: RoundedRectangleBorder(
-  //           borderRadius: BorderRadius.circular(10),
-  //         ),
-  //       ),
-  //       child: const Text("Post Review"),
-  //     ),
-  //   );
-  // }
 
   Column _buildReviewGuidelines() {
     return Column(
