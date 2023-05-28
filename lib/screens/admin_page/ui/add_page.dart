@@ -32,6 +32,8 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
   final TextEditingController _descController = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
+  bool isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -262,6 +264,9 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                               );
                               return;
                             }
+                            setState(() {
+                              isLoading = true;
+                            });
                             final String imageOne = await uploadImageOne
                                 .upLoadToFirebase(_nameController.text);
                             final String imageTwo = await uploadImageTwo
@@ -281,12 +286,16 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                 numReviews: 0,
                                 avgRating: "0.0",
                                 images: [imageOne, imageTwo, imageThree],
-                                menu: imageMenu
-                                );
-                                Response response = await RestaurantRepository.addRestaurant(restaurant);
-                                if (response.getStatus == 200) {
-                                  Navigator.of(context).pop();
-                                }; 
+                                menu: imageMenu);
+                            Response response =
+                                await RestaurantRepository.addRestaurant(
+                                    restaurant);
+                            setState(() {
+                              isLoading = false;
+                            });
+                            if (response.getStatus == 200) {
+                              Navigator.of(context).pop();
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown,
@@ -294,13 +303,17 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(30.0))),
                           ),
-                          child: const Text(
-                            'Add Restaurant',
-                            style: TextStyle(
+                          child: !isLoading
+                              ? const Text(
+                                  'Add Restaurant',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                )
+                              : const CircularProgressIndicator(
                                 color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          )),
+                              )),
                     ),
                   ],
                 ),
