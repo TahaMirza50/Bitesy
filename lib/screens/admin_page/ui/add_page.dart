@@ -6,7 +6,10 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:regexed_validator/regexed_validator.dart';
+import 'package:resturant_review_app/constants/constants.dart';
 import 'package:resturant_review_app/screens/admin_page/ui/utilities.dart';
+import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
+import 'package:resturant_review_app/screens/search_page/repository/restaurant_repo.dart';
 
 class AddRestaurantPage extends StatefulWidget {
   const AddRestaurantPage({super.key});
@@ -72,9 +75,9 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                             Icons.house,
                             _nameController,
                             TextInputType.emailAddress,
-                            (value) => value != null
-                                ? null
-                                : "Invalid Restaurant Name",
+                            (value) => value != null && value.length < 3
+                                ? "Invalid Restaurant Name"
+                                : null,
                             1),
                         const SizedBox(
                           height: 20,
@@ -223,7 +226,68 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                       height: 50,
                       width: MediaQuery.of(context).size.width - 40,
                       child: ElevatedButton(
-                          onPressed: () async {},
+                          onPressed: () async {
+                            final isValid = formKey.currentState!.validate();
+                            if (!isValid) return;
+                            if (uploadImageOne.getImage() == null ||
+                                uploadImageTwo.getImage() == null ||
+                                uploadImageThree.getImage() == null ||
+                                uploadImageMenu.getImage() == null) {
+                              showDialog(
+                                context: context,
+                                barrierDismissible: false,
+                                builder: (BuildContext context) {
+                                  return ClipRRect(
+                                    borderRadius: const BorderRadius.all(
+                                        Radius.circular(16.0)),
+                                    child: AlertDialog(
+                                      title: const Text(
+                                        "Error",
+                                        style: TextStyle(
+                                            color: Colors.brown,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                      content: const Text("Upload all images."),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text("OK"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                              return;
+                            }
+                            final String imageOne = await uploadImageOne
+                                .upLoadToFirebase(_nameController.text);
+                            final String imageTwo = await uploadImageTwo
+                                .upLoadToFirebase(_nameController.text);
+                            final String imageThree = await uploadImageThree
+                                .upLoadToFirebase(_nameController.text);
+                            final String imageMenu = await uploadImageMenu
+                                .upLoadToFirebase(_nameController.text);
+                            final RestaurantModel restaurant = RestaurantModel(
+                                id: Constants.IDGenerator.v1(),
+                                name: _nameController.text,
+                                address: "Gulshan",
+                                email: _emailController.text,
+                                phoneNum: _phoneController.text,
+                                website: _websiteController.text,
+                                description: _descController.text,
+                                numReviews: 0,
+                                avgRating: "0.0",
+                                images: [imageOne, imageTwo, imageThree],
+                                menu: imageMenu
+                                );
+                                Response response = await RestaurantRepository.addRestaurant(restaurant);
+                                if (response.getStatus == 200) {
+                                  Navigator.of(context).pop();
+                                }; 
+                          },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown,
                             shape: const RoundedRectangleBorder(

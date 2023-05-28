@@ -11,16 +11,15 @@ class Response {
   String message;
   List<RestaurantModel> restaurantsList;
   Response({this.status = 0, this.message = "", required this.restaurantsList});
+  
   int get getStatus => status;
   String get getMessage => message;
 }
 
 class RestaurantRepository {
-
   // Future<List<RestaurantModel>> getList() => Future.value(restaurantsList);
 
   static Future<Response> fetchRestaurantList() async {
-
     List<RestaurantModel> restaurantsList = [];
 
     Response response = Response(restaurantsList: restaurantsList);
@@ -44,13 +43,12 @@ class RestaurantRepository {
     return response;
   }
 
-  static Future<Response> fetchRestaurantByName(String name) async{
-
-        List<RestaurantModel> restaurantsList = [];
+  static Future<Response> fetchRestaurantByName(String name) async {
+    List<RestaurantModel> restaurantsList = [];
 
     Response response = Response(restaurantsList: restaurantsList);
 
-        try {
+    try {
       QuerySnapshot snapshot = await _restaurants.get();
 
       if (snapshot.size > 0) {
@@ -59,8 +57,9 @@ class RestaurantRepository {
               document.data() as Map<String, dynamic>?;
           String documentName = (documentData!['name'] as String).toLowerCase();
           if (documentName.contains(name.toLowerCase())) {
-          response.restaurantsList.add(RestaurantModel.fromJson(documentData));
-        }
+            response.restaurantsList
+                .add(RestaurantModel.fromJson(documentData));
+          }
         }
       }
       response.status = 200;
@@ -71,6 +70,20 @@ class RestaurantRepository {
     }
 
     return response;
+  }
 
+  static Future<Response> addRestaurant(RestaurantModel restaurantModel) async {
+    Response response = Response(restaurantsList: [restaurantModel]);
+
+    DocumentReference documentReference = _restaurants.doc(restaurantModel.id);
+
+    await documentReference.set(restaurantModel.toJson()).whenComplete(() {
+      response.status = 200;
+      response.message = "User added successfully";
+    }).catchError((e) {
+      response.status = 400;
+      response.message = "Something went wrong";
+    });
+    return response;
   }
 }
