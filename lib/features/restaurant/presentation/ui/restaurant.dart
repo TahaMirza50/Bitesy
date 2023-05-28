@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:resturant_review_app/features/restaurant/sections/info/presentation/ui/restaurant_info.dart';
+import 'package:resturant_review_app/features/restaurant/sections/menu/presentation/ui/restaurant_menu.dart';
 import 'package:resturant_review_app/features/restaurant/sections/review/presentation/ui/restaurant_review.dart';
 import 'package:resturant_review_app/features/restaurant/widgets/star.dart';
+import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
 
 class RestaurantPage extends StatefulWidget {
-  const RestaurantPage({super.key});
+  final RestaurantModel restaurantModel;
+  const RestaurantPage({super.key, required this.restaurantModel});
 
   @override
   State<RestaurantPage> createState() => _RestaurantPageState();
@@ -17,6 +21,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
   @override
   void initState() {
     super.initState();
+
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
   }
@@ -36,9 +41,23 @@ class _RestaurantPageState extends State<RestaurantPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: true,
-        appBar: _buildAppBar(),
-        body: _buildBody());
+      extendBodyBehindAppBar: true,
+      appBar: _buildAppBar(),
+      body: _buildBody(),
+      persistentFooterButtons: [
+        Container(
+          width: MediaQuery.of(context).size.width,
+          child: ElevatedButton(
+            onPressed: () {},
+            child: Text('Directions',
+                style: TextStyle(
+                    fontSize: 16,
+                    letterSpacing: 1.2,
+                    fontWeight: FontWeight.w900)),
+          ),
+        ),
+      ],
+    );
   }
 
   SingleChildScrollView _buildBody() {
@@ -53,17 +72,79 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 _buildOverlayedContent(),
               ],
             ),
-            const RestaurantReview()
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  // an array of icon button call with text label call and a circular background in grey color
+
+                  _buildIconButton(
+                    icon: Icons.call_outlined,
+                    label: 'Call',
+                  ),
+                  const SizedBox(width: 8),
+                  _buildIconButton(
+                    icon: Icons.map_outlined,
+                    label: 'Map',
+                  ),
+                  const SizedBox(width: 8),
+
+                  _buildIconButton(
+                    icon: Icons.link_outlined,
+                    label: 'Web',
+                  ),
+                ],
+              ),
+            ),
+            const RestaurantMenu(),
+            RestaurantInfo(restaurantModel: widget.restaurantModel),
+            RestaurantReview(restaurantModel: widget.restaurantModel)
           ],
         ),
       ),
     );
   }
 
+  // build Icon button
+  Widget _buildIconButton({
+    required IconData icon,
+    required String label,
+  }) {
+    // icon button with grey circular background
+    return Column(
+      children: [
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.brown[200],
+            borderRadius: BorderRadius.circular(40),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, color: Colors.grey[900], size: 24),
+            ],
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            color: Colors.grey[700],
+          ),
+        ),
+      ],
+    );
+  }
+
   Container _buildOverlayedContent() {
     return Container(
       padding: EdgeInsets.all(16.0),
-      margin: const EdgeInsets.fromLTRB(0, 32, 0, 0),
+      margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
       alignment: Alignment.centerLeft,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +249,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
 
       //Slider Container properties
       options: CarouselOptions(
-        height: 200,
+        height: 250,
         viewportFraction: 1.0,
         autoPlay: true,
         autoPlayInterval: Duration(seconds: 3),
@@ -189,7 +270,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
             Icons.arrow_back_outlined,
             color: _showAppBarBackground ? Colors.black : Colors.white,
           ),
-          onPressed: () {},
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
         actions: [
           IconButton(

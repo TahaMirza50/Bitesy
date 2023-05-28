@@ -1,27 +1,78 @@
 import 'package:flutter/material.dart';
-import 'package:resturant_review_app/features/restaurant/sections/review/widgets/header_text.dart';
+import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
+import 'package:resturant_review_app/features/restaurant/sections/review/presentation/bloc/review_bloc.dart';
+import 'package:resturant_review_app/features/restaurant/widgets/header_text.dart';
 import 'package:resturant_review_app/features/restaurant/sections/review/widgets/outlined_button.dart';
 import 'package:resturant_review_app/features/restaurant/sections/write_a_review/presentation/ui/write_a_review.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
 
 import '../../../../widgets/star.dart';
 import '../../widgets/review_card.dart';
 
 class RestaurantReview extends StatefulWidget {
-  const RestaurantReview({super.key});
+  final RestaurantModel restaurantModel;
+  const RestaurantReview({super.key, required this.restaurantModel});
 
   @override
   State<RestaurantReview> createState() => _RestaurantReviewState();
 }
 
 class _RestaurantReviewState extends State<RestaurantReview> {
+  final ReviewBloc reviewBloc = ReviewBloc();
+  @override
+  void initState() {
+    super.initState();
+    reviewBloc.add(ReviewInitialEvent(restaurantId: widget.restaurantModel.id));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Future<void> _navigateToWriteAReview() async {
+    Navigator.of(context).push(
+      MaterialPageRoute<void>(
+          builder: (BuildContext context) =>
+              WriteAReview(restaurantModel: widget.restaurantModel)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<ReviewBloc, ReviewState>(
+      bloc: reviewBloc,
+      listenWhen: (previous, current) => current is ReviewActionState,
+      buildWhen: (previous, current) => current is! ReviewActionState,
+      listener: (context, state) {
+        if (state is NavigateToWriteAReviewActionState) {
+          _navigateToWriteAReview();
+        }
+      },
+      builder: (context, state) {
+        switch (state.runtimeType) {
+          case ReviewLoadingState:
+            return const Center(child: CircularProgressIndicator());
+          case ReviewErrorState:
+            return const Center(child: Text("Error"));
+          case ReviewSuccessState:
+            ReviewSuccessState successState = state as ReviewSuccessState;
+            return _buildBody(successState.reviews);
+            ;
+        }
+        return Container();
+      },
+    );
+  }
+
+  SingleChildScrollView _buildBody(List<RestaurantReviewModel> reviews) {
     return SingleChildScrollView(
-      physics: ScrollPhysics(),
+      physics: const ScrollPhysics(),
       child: Column(
         children: [
           _buildLeaveAReview(),
-          _buildRecommendedReviews(),
+          _buildRecommendedReviews(reviews),
         ],
       ),
     );
@@ -50,7 +101,7 @@ class _RestaurantReviewState extends State<RestaurantReview> {
     );
   }
 
-  Widget _buildRecommendedReviews() {
+  Widget _buildRecommendedReviews(List<RestaurantReviewModel> reviews) {
     return Container(
         color: Colors.white,
         child: Padding(
@@ -61,27 +112,31 @@ class _RestaurantReviewState extends State<RestaurantReview> {
                     header: "Recommended Reviews",
                     textStyle:
                         TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 8),
+                const SizedBox(height: 24),
                 Row(
                   children: [
-                    _buildReviewsOverview(),
+                    _buildReviewsOverview(widget.restaurantModel.numReviews),
                   ],
                 ),
                 ListView.builder(
+                    padding: EdgeInsets.zero,
                     physics: NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
-                    itemCount: 7,
+                    itemCount: reviews.length,
                     itemBuilder: (context, index) {
-                      return ReviewCard();
+                      return ReviewCard(
+                        review: reviews[index],
+                      );
                     })
               ],
             )));
   }
 
-  Expanded _buildReviewsOverview() {
+  Expanded _buildReviewsOverview(int numReviews) {
     return Expanded(
       child: GridView.count(
         crossAxisCount: 2,
+        padding: EdgeInsets.zero,
         childAspectRatio: 1.0,
         crossAxisSpacing: 10.0,
         mainAxisSpacing: 10.0,
@@ -100,7 +155,7 @@ class _RestaurantReviewState extends State<RestaurantReview> {
               ),
               const SizedBox(height: 8),
               HeaderText(
-                  header: "2,324 reviews",
+                  header: "${numReviews} reviews",
                   textStyle: TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w400,
@@ -161,10 +216,7 @@ class _RestaurantReviewState extends State<RestaurantReview> {
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const WriteAReview()),
-              );
+              reviewBloc.add(const NavigateToWriteAReviewEvent());
             },
             child: Column(
               children: [

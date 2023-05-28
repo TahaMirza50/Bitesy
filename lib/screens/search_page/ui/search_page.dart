@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
 import 'package:resturant_review_app/screens/search_page/bloc/search_page_bloc.dart';
+import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
 import 'package:resturant_review_app/screens/search_page/ui/restaurant_tile_widget.dart';
 
 class SearchPage extends StatefulWidget {
@@ -170,10 +172,10 @@ class _SearchPageState extends State<SearchPage> {
                 final navigateState = state as NavigateToRestaurantPageState;
                 print(navigateState.restaurantModel.name);
                 print("pushed");
-                // Navigator.push(
-                //   context,
-                //   MaterialPageRoute(builder: (context) => const RestPage()),
-                // );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => RestaurantPage(restaurantModel: navigateState.restaurantModel,)),
+                );
               }
             },
             builder: (context, state) {
