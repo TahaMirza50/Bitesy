@@ -261,7 +261,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                 context: context);
                             if (user != null) {
                               final userModel = UserModel(
-                                  id: Constants.IDGenerator.v1(),
+                                  id: FirebaseAuth.instance.currentUser!.uid,
                                   firstName: _firstNameController.text.trim(),
                                   lastName: _lastNameController.text.trim(),
                                   email: _emailController.text.trim(),
@@ -435,7 +435,6 @@ class _SignUpPageState extends State<SignUpPage> {
               height: 55,
               child: FormField<String>(
                 autovalidateMode: AutovalidateMode.onUserInteraction,
-                validator: (value) => value == "G" ? 'Select gender.' : null,
                 builder: (FormFieldState<String> state) {
                   return InputDecorator(
                     decoration: InputDecoration(

@@ -10,9 +10,9 @@ class RestaurantModel{
 
   final String avgRating;
   final int numReviews;
-  final String openHours;
 
   final List<String> images;
+  final List<String> menu;
 
 
   RestaurantModel({
@@ -25,8 +25,8 @@ class RestaurantModel{
     required this.website,
     required this.avgRating,
     required this.numReviews,
-    required this.openHours,
-    required this.images
+    required this.images,
+    required this.menu
   });
 
   static RestaurantModel fromJson(Map<String, dynamic> json) {
@@ -40,8 +40,8 @@ class RestaurantModel{
             website: json['website'] as String? ?? "field empty",
             avgRating: json['avgRating'] as String? ?? "0.0",
             numReviews: json['numReviews'] as int? ?? 0,
-            openHours: json['openHours'] as String? ?? "field empty",
-            images: List<String>.from(json['images'] ?? []));
+            images: List<String>.from(json['images'] ?? [],),
+            menu: List<String>.from(json['images'] ?? []));
   }
 
   Map<String, dynamic> toJson() {
@@ -55,8 +55,8 @@ class RestaurantModel{
             'website': website,
             'avgRating': avgRating,
             'numReviews': numReviews,
-            'openHours': openHours,
             'images': images,
+            'menu':menu
     };
   }
 

@@ -21,7 +21,7 @@ class UserRepository {
   static Future<ResponseUser> addUser(UserModel user) async {
     ResponseUser response = ResponseUser(user: user);
 
-    DocumentReference documentReference = _users.doc(user.id);
+    DocumentReference documentReference = _users.doc(FirebaseAuth.instance.currentUser!.uid);
 
     await documentReference.set(user.toJson()).whenComplete(() {
       response.status = 200;
