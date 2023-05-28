@@ -25,6 +25,7 @@ class RestaurantTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                clipBehavior: Clip.hardEdge,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(10)),
                   width: double.infinity,

@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:resturant_review_app/constants/constants.dart';
+import 'package:resturant_review_app/screens/admin_page/ui/add_page.dart';
 import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
 import 'package:resturant_review_app/screens/login_and_signup/repository/user_repository.dart';
 import 'package:resturant_review_app/screens/search_page/bloc/search_page_bloc.dart';
@@ -226,10 +227,15 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               ),
               ListTile(
-                leading: const Icon(Icons.dashboard, color: Colors.white),
-                title: const Text('Admin Dashboard',
+                leading: const Icon(Icons.add, color: Colors.white),
+                title: const Text('Add Restaurant',
                     style: TextStyle(color: Colors.white)),
-                onTap: () {},
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => AddRestaurantPage()));
+                },
               ),
               const Spacer(),
               const Divider(color: Colors.white, thickness: 1),
@@ -256,125 +262,124 @@ class _SearchPageState extends State<SearchPage> {
           ),
         );
       }
-              return Drawer(
-          backgroundColor: Colors.brown,
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 40,
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "${userModel.firstName} ${userModel.lastName}",
-                        style: const TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        userModel.email,
-                        style: const TextStyle(color: Colors.brown),
-                      ),
-                    ],
-                  ),
+      return Drawer(
+        backgroundColor: Colors.brown,
+        child: Column(
+          children: <Widget>[
+            Container(
+              height: 200,
+              width: double.infinity,
+              decoration: const BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const CircleAvatar(
+                      backgroundColor: Colors.black,
+                      radius: 40,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      "${userModel.firstName} ${userModel.lastName}",
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      userModel.email,
+                      style: const TextStyle(color: Colors.brown),
+                    ),
+                  ],
                 ),
               ),
-              const Spacer(),
-              const Divider(color: Colors.white, thickness: 1),
-              ListTile(
-                leading: const Icon(Icons.exit_to_app, color: Colors.white),
-                title: const Text('Log Out',
-                    style: TextStyle(color: Colors.white)),
-                onTap: () async {
-                  FacebookAuth.instance.logOut();
-                  GoogleSignIn().disconnect();
-                  FirebaseAuth.instance.signOut().then((value) => {
-                        search = false,
-                        Navigator.popUntil(
-                          context,
-                          ModalRoute.withName('/'),
-                        )
-                      });
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
-          ),
-        );
+            ),
+            const Spacer(),
+            const Divider(color: Colors.white, thickness: 1),
+            ListTile(
+              leading: const Icon(Icons.exit_to_app, color: Colors.white),
+              title:
+                  const Text('Log Out', style: TextStyle(color: Colors.white)),
+              onTap: () async {
+                FacebookAuth.instance.logOut();
+                GoogleSignIn().disconnect();
+                FirebaseAuth.instance.signOut().then((value) => {
+                      search = false,
+                      Navigator.popUntil(
+                        context,
+                        ModalRoute.withName('/'),
+                      )
+                    });
+              },
+            ),
+            const SizedBox(
+              height: 20,
+            )
+          ],
+        ),
+      );
     }
 
-            return Drawer(
-          backgroundColor: Colors.brown,
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 200,
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
-                      CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 40,
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        "No Name",
-                        style: TextStyle(fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        "No Email",
-                        style: TextStyle(color: Colors.brown),
-                      ),
-                    ],
+    return Drawer(
+      backgroundColor: Colors.brown,
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 200,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  CircleAvatar(
+                    backgroundColor: Colors.black,
+                    radius: 40,
                   ),
-                ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "No Name",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text(
+                    "No Email",
+                    style: TextStyle(color: Colors.brown),
+                  ),
+                ],
               ),
-              const Spacer(),
-              const Divider(color: Colors.white, thickness: 1),
-              ListTile(
-                leading: const Icon(Icons.exit_to_app, color: Colors.white),
-                title: const Text('Log Out',
-                    style: TextStyle(color: Colors.white)),
-                onTap: () async {
-                  FacebookAuth.instance.logOut();
-                  GoogleSignIn().disconnect();
-                  FirebaseAuth.instance.signOut().then((value) => {
-                        search = false,
-                        Navigator.popUntil(
-                          context,
-                          ModalRoute.withName('/'),
-                        )
-                      });
-                },
-              ),
-              const SizedBox(
-                height: 20,
-              )
-            ],
+            ),
           ),
-        );
+          const Spacer(),
+          const Divider(color: Colors.white, thickness: 1),
+          ListTile(
+            leading: const Icon(Icons.exit_to_app, color: Colors.white),
+            title: const Text('Log Out', style: TextStyle(color: Colors.white)),
+            onTap: () async {
+              FacebookAuth.instance.logOut();
+              GoogleSignIn().disconnect();
+              FirebaseAuth.instance.signOut().then((value) => {
+                    search = false,
+                    Navigator.popUntil(
+                      context,
+                      ModalRoute.withName('/'),
+                    )
+                  });
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          )
+        ],
+      ),
+    );
   }
 }
