@@ -1,4 +1,4 @@
-class UserModel{
+class UserModel {
   final String id;
   final String firstName;
   final String lastName;
@@ -15,24 +15,28 @@ class UserModel{
     required this.role,
   });
 
-  toJson(){
-    return{
+   Map<String, dynamic> toJson() {
+    return {
       'ID': id,
-      'First Name' : firstName,
-      'Last Name' : lastName,
+      'First Name': firstName,
+      'Last Name': lastName,
       'Email': email,
       'Gender': gender,
-      'Role': role 
+      'Role': role
     };
   }
 
-    static UserModel fromJson(Map<String, dynamic> json) {
+  static UserModel fromJson(Map<String, dynamic> json) {
     return UserModel(
-            id: json['ID'] as String? ?? "field empty" ,
-            firstName: json['First Name'] as String? ?? "field empty",
-            lastName: json['Last Name'] as String? ?? "field empty",
-            email: json['email'] as String? ?? "field empty",
-            gender: json['Gender'] as String? ?? "field empty",
-            role: json['Role'] as String? ?? "field empty");
+        id: json['ID'] as String? ?? "field empty",
+        firstName: json['First Name'] as String? ?? "field empty",
+        lastName: json['Last Name'] as String? ?? "field empty",
+        email: json['Email'] as String? ?? "field empty",
+        gender: json['Gender'] as String? ?? "field empty",
+        role: json['Role'] as String? ?? "field empty");
+  }
+
+  String get userRole {
+    return role;
   }
 }
