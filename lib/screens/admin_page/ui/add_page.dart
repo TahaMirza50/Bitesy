@@ -1,13 +1,14 @@
 import 'dart:io';
 
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 import 'package:resturant_review_app/constants/constants.dart';
+import 'package:resturant_review_app/screens/admin_page/ui/form_field.dart';
 import 'package:resturant_review_app/screens/admin_page/ui/image_helper.dart';
+import 'package:resturant_review_app/screens/admin_page/ui/location_picker.dart';
 import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
 import 'package:resturant_review_app/screens/search_page/repository/restaurant_repo.dart';
 
@@ -24,12 +25,15 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
   final UploadImage uploadImageThree = UploadImage();
   final UploadImage uploadImageMenu = UploadImage();
 
-  final TextEditingController _imageOneController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
   final TextEditingController _descController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _addressController = TextEditingController();
+
   final formKey = GlobalKey<FormState>();
 
   bool isLoading = false;
@@ -72,67 +76,76 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                     key: formKey,
                     child: Column(
                       children: [
-                        FormField(
-                            "Restaurant Name",
-                            Icons.house,
-                            _nameController,
-                            TextInputType.emailAddress,
-                            (value) => value != null && value.length < 3
-                                ? "Invalid Restaurant Name"
-                                : null,
-                            1),
+                        FormFieldWidget(
+                            hintText: "Restaurant Name",
+                            icon: Icons.house,
+                            controller: _nameController,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) =>
+                                value != null && value.length < 3
+                                    ? "Invalid Restaurant Name"
+                                    : null,
+                            maxLines: 1),
                         const SizedBox(
                           height: 20,
                         ),
-                        FormField("Restaurant Number", Icons.phone,
-                            _phoneController, TextInputType.number, (value) {
-                          if (value != null &&
-                              RegExp(r"(^(?:[+0]9)?[0-9]{10,12}$)")
-                                  .hasMatch(value)) {
-                            return null;
-                          } else {
-                            return "Invalid Phone Number";
-                          }
-                        }, 1),
+                        FormFieldWidget(
+                            hintText: "Restaurant Number",
+                            icon: Icons.phone,
+                            controller: _phoneController,
+                            keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value != null &&
+                                  RegExp(r"(^(?:[+0]9)?[0-9]{10,12}$)")
+                                      .hasMatch(value)) {
+                                return null;
+                              } else {
+                                return "Invalid Phone Number";
+                              }
+                            },
+                            maxLines: 1),
                         const SizedBox(
                           height: 20,
                         ),
-                        FormField(
-                            "Restaurant Email",
-                            Icons.email,
-                            _emailController,
-                            TextInputType.emailAddress,
-                            (value) =>
+                        FormFieldWidget(
+                            hintText: "Restaurant Email",
+                            icon: Icons.email,
+                            controller: _emailController,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) =>
                                 value != null && !EmailValidator.validate(value)
                                     ? 'Invalid email'
                                     : null,
-                            1),
+                            maxLines: 1),
                         const SizedBox(
                           height: 20,
                         ),
-                        FormField(
-                            "http://www.example.com",
-                            Icons.web,
-                            _websiteController,
-                            TextInputType.emailAddress,
-                            (value) => value != null && !validator.url(value)
-                                ? 'Invalid URL'
-                                : null,
-                            1),
+                        FormFieldWidget(
+                            hintText: "http://www.example.com",
+                            icon: Icons.web,
+                            controller: _websiteController,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) =>
+                                value != null && !validator.url(value)
+                                    ? 'Invalid URL'
+                                    : null,
+                            maxLines: 1),
                         const SizedBox(
                           height: 20,
                         ),
-                        FormField(
-                            "Restaurant Description",
-                            Icons.description,
-                            _descController,
-                            TextInputType.emailAddress, (value) {
-                          if (value != null && value.length < 10) {
-                            return "Description must be at least 10 characters";
-                          } else {
-                            return null;
-                          }
-                        }, 5),
+                        FormFieldWidget(
+                            hintText: "Restaurant Description",
+                            icon: Icons.description,
+                            controller: _descController,
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value != null && value.length < 10) {
+                                return "Description must be at least 10 characters";
+                              } else {
+                                return null;
+                              }
+                            },
+                            maxLines: 5),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 30.0),
                           child: Align(
@@ -216,7 +229,105 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                             ),
                           ),
                         ),
-                        ImageField(uploadImageMenu)
+                        ImageField(uploadImageMenu),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 30.0),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Select Location",
+                              style: TextStyle(
+                                  color: Color.fromARGB(255, 122, 102, 95),
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                        FormFieldWidget(
+                            hintText: 'Latitude',
+                            icon: Icons.location_on,
+                            controller: _latitudeController,
+                            keyboardType: TextInputType.number,
+                            validator: (value) => value != null && value.isEmpty
+                                ? "invalid value"
+                                : null,
+                            maxLines: 1),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        FormFieldWidget(
+                            hintText: 'Longitude',
+                            icon: Icons.location_on,
+                            controller: _longitudeController,
+                            keyboardType: TextInputType.number,
+                            validator: (value) => value != null && value.isEmpty
+                                ? "invalid value"
+                                : null,
+                            maxLines: 1),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        TextFormField(
+                          enabled: false,
+                          controller: _addressController,
+                          decoration: const InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Icon(
+                                Icons.location_searching_outlined,
+                                color: Colors.brown,
+                              ),
+                            ),
+                            hintText: "Restaurant Address",
+                            contentPadding: EdgeInsets.all(15),
+                            border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(16.0)),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(16.0)),
+                                borderSide:
+                                    BorderSide(color: Colors.brown, width: 2)),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        ElevatedButton(
+                            onPressed: () async {
+                              if (_latitudeController.text.trim().isEmpty ||
+                                  _longitudeController.text.trim().isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Please enter latitude and longitude")));
+                                            return;
+                              }
+                              List<Placemark> placemarks =
+                                  await placemarkFromCoordinates(
+                                      double.parse(
+                                          _latitudeController.text.trim()),
+                                      double.parse(
+                                          _longitudeController.text.trim()));
+                              setState(() {
+                                _addressController.text =
+                                    "${placemarks[0].subLocality!}, ${placemarks[0].locality!}, ${placemarks[0].administrativeArea!}, ${placemarks[0].country}.";
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.brown,
+                              shape: const RoundedRectangleBorder(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(30.0))),
+                            ),
+                            child: const Text(
+                              'Check Address',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold),
+                            )),
                       ],
                     )),
               ),
@@ -235,7 +346,10 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                 uploadImageTwo.getImage() == null ||
                                 uploadImageThree.getImage() == null ||
                                 uploadImageMenu.getImage() == null) {
-                              ErrorMessage();
+                               ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Please upload all images.")));
                               return;
                             }
                             setState(() {
@@ -252,14 +366,14 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                             final RestaurantModel restaurant = RestaurantModel(
                                 id: Constants.IDGenerator.v1(),
                                 name: _nameController.text,
-                                address: "Gulshan",
+                                address: _addressController.text,
                                 email: _emailController.text,
                                 phoneNum: _phoneController.text,
                                 website: _websiteController.text,
                                 description: _descController.text,
                                 numReviews: 0,
-                                latitude: "37.7749",
-                                longitude: "-122.4194",
+                                latitude: _latitudeController.text.trim(),
+                                longitude: _longitudeController.text.trim(),
                                 avgRating: "0.0",
                                 ratingCounts: {
                                   '5': 0,
@@ -335,7 +449,7 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                       )
                     : Container(
                         decoration: BoxDecoration(
-                          color: Colors.grey,
+                            color: Colors.grey,
                             borderRadius: BorderRadius.circular(16)),
                         height: 100,
                       )),
@@ -357,74 +471,6 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget FormField(
-      String hintText,
-      IconData icon,
-      TextEditingController controller,
-      TextInputType keyboardType,
-      String? Function(String?)? validator,
-      int maxLines) {
-    return TextFormField(
-      maxLines: maxLines,
-      autovalidateMode: AutovalidateMode.onUserInteraction,
-      validator: validator,
-      controller: controller,
-      cursorColor: Colors.brown,
-      decoration: InputDecoration(
-        suffixIcon: IconButton(
-          onPressed: controller.clear,
-          icon: const Icon(Icons.clear),
-        ),
-        prefixIcon: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Icon(
-            icon,
-            color: Colors.brown,
-          ),
-        ),
-        hintText: hintText,
-        contentPadding: const EdgeInsets.all(15),
-        border: const OutlineInputBorder(
-          borderRadius: BorderRadius.all(Radius.circular(16.0)),
-        ),
-        focusedBorder: const OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16.0)),
-            borderSide: BorderSide(color: Colors.brown, width: 2)),
-      ),
-      onChanged: (value) {},
-      keyboardType: keyboardType,
-      textInputAction: TextInputAction.next,
-    );
-  }
-
-  Future<Widget> ErrorMessage() async {
-    return await showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          child: AlertDialog(
-            title: const Text(
-              "Error",
-              style:
-                  TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),
-            ),
-            content: const Text("Upload all images."),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("OK"),
-              ),
-            ],
-          ),
-        );
-      },
     );
   }
 }
