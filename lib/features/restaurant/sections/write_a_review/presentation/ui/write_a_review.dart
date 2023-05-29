@@ -98,8 +98,8 @@ class _WriteAReviewState extends State<WriteAReview> {
                             review: textarea.text,
                             userId: FirebaseAuth.instance.currentUser!.uid
                                 .toString(),
-                            userName: FirebaseAuth
-                                .instance.currentUser!.displayName
+                            userEmail: FirebaseAuth
+                                .instance.currentUser!.email
                                 .toString(),
                           ));
                         },
@@ -111,7 +111,7 @@ class _WriteAReviewState extends State<WriteAReview> {
                           minimumSize: const Size(200, 50),
                           shadowColor: Colors.grey,
                           elevation: 5,
-                          backgroundColor: Colors.red[600],
+                          backgroundColor: Colors.brown,
                           side: const BorderSide(
                               color: Colors.transparent,
                               width: 2,
@@ -139,8 +139,8 @@ class _WriteAReviewState extends State<WriteAReview> {
         children: [
           Row(
             children: [
-              const Text(
-                'Cuisines of Nepal',
+              Text(
+                widget.restaurantModel.name,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w800,

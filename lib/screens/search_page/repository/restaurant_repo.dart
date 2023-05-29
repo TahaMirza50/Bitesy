@@ -43,6 +43,7 @@ class RestaurantRepository {
     return response;
   }
 
+  
   static Future<Response> fetchRestaurantByName(String name) async {
     List<RestaurantModel> restaurantsList = [];
 

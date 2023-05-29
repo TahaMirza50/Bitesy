@@ -34,8 +34,8 @@ class WriteARestaurantReviewRepository {
   }
 
   // update restaurant details
-  static Future<Response> updateRestaurantDetails(
-      int rating, String restaurantId, int totalRatings, String avgRating) async {
+  static Future<Response> updateRestaurantDetails(int rating,
+      String restaurantId, int totalRatings, String avgRating) async {
     print("Inside update restaurant details repo");
 
     CollectionReference restaurant = _firestore.collection('restaurant');
@@ -43,8 +43,11 @@ class WriteARestaurantReviewRepository {
     Response response = Response();
     try {
       await restaurant.doc(restaurantId).update({
-        'avgRating': (((double.parse(avgRating) * totalRatings) + rating) / (totalRatings + 1)).toString(),
+        'avgRating': (((double.parse(avgRating) * totalRatings) + rating) /
+                (totalRatings + 1))
+            .toString(),
         'numReviews': FieldValue.increment(1),
+        'ratingCounts.$rating': FieldValue.increment(1)
       });
       response.status = 200;
       response.message = "Restaurant Details updated successfully";

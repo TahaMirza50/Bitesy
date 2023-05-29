@@ -23,7 +23,7 @@ class RestaurantReviewRepository {
 
     Response response = Response(reviewList: reviewList);
     try {
-      QuerySnapshot snapshot = await _reviews.where("restaurantId", isEqualTo: restaurantId).get();
+      QuerySnapshot snapshot = await _reviews.where("restaurantId", isEqualTo: restaurantId).orderBy("timestamp", descending: true).get();
 
       if (snapshot.size > 0) {
         for (QueryDocumentSnapshot document in snapshot.docs) {

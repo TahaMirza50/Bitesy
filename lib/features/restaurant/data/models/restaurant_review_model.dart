@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class RestaurantReviewModel {
   final String id;
   final String restaurantId;
@@ -6,6 +8,7 @@ class RestaurantReviewModel {
   final String avatar;
   final String review;
   final int rating;
+  final Timestamp timestamp;
   final List<String> images;
 
   RestaurantReviewModel(
@@ -16,6 +19,7 @@ class RestaurantReviewModel {
       required this.avatar,
       required this.review,
       required this.rating,
+      required this.timestamp,
       required this.images});
 
   static RestaurantReviewModel fromJson(Map<String, dynamic> json) {
@@ -27,6 +31,7 @@ class RestaurantReviewModel {
         avatar: json['avatar'] as String? ?? "field empty",
         review: json['review'] as String? ?? "field empty",
         rating: json['rating'] as int? ?? 0,
+        timestamp: json['timestamp'] as Timestamp? ?? Timestamp.now(),
         images: List<String>.from(json['images'] ?? []));
   }
 
@@ -40,6 +45,7 @@ class RestaurantReviewModel {
       'review': review,
       'rating': rating,
       'images': images,
+      'timestamp': timestamp,
     };
   }
 }

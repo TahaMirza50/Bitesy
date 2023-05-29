@@ -12,5 +12,6 @@ abstract class RestaurantActionEvent extends RestaurantEvent {
 }
 
 class RestaurantInitialEvent extends RestaurantEvent {
-  const RestaurantInitialEvent();
+  final String id;
+  const RestaurantInitialEvent({required this.id});
 }

@@ -11,12 +11,14 @@ class RestaurantInitial extends RestaurantState {}
 
 class RestaurantLoadingState extends RestaurantState {}
 
-class RestaurantSuccessState extends  RestaurantState {}
+class RestaurantSuccessState extends  RestaurantState {
+  final RestaurantModel restaurant;
 
-class RestaurantErrorState extends RestaurantState {}
+  const RestaurantSuccessState({required this.restaurant});
+}
 
-class ReviewLoadingState extends RestaurantState {}
+class RestaurantErrorState extends RestaurantState {
+  final String message;
 
-class ReviewSuccessState extends RestaurantState {}
-
-class ReviewErrorState extends RestaurantState {}
+  const RestaurantErrorState({required this.message});
+}

@@ -1,10 +1,12 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../../../screens/login_and_signup/repository/user_repository.dart';
 import '../../domain/repostiories/write_a_review_repo.dart';
 
 part 'write_a_review_event.dart';
@@ -21,7 +23,11 @@ class WriteAReviewBloc extends Bloc<WriteAReviewEvent, WriteAReviewState> {
     print("Post Review Event");
     emit(WriteAReviewLoadingState());
 
+    // fetch user details using email
+    ResponseUser userResponse = await UserRepository.fetchUserByEmail(event.userEmail);
+
     RestaurantReviewModel review = RestaurantReviewModel(
+      // TODO: replace it with avatar from userResponse
       avatar: event.avatar,
       id: uuid.v4(),
       images: event.images != null ? event.images! : [],
@@ -29,7 +35,8 @@ class WriteAReviewBloc extends Bloc<WriteAReviewEvent, WriteAReviewState> {
       restaurantId: event.restaurantId,
       review: event.review,
       userId: event.userId,
-      userName: event.userName,
+      userName: userResponse.user.firstName,
+      timestamp: Timestamp.now(),
     );
     // Call the API to post the review
     Response response =
@@ -51,10 +58,5 @@ class WriteAReviewBloc extends Bloc<WriteAReviewEvent, WriteAReviewState> {
     else {
       emit(WriteAReviewErrorState(message: response.message));
     }
-    // Call the API to update num_reviews and avg_rating
-    
-    // Navigate to Restaurant Home
-
-    
   }
 }

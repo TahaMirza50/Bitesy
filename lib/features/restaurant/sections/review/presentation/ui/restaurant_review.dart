@@ -188,7 +188,8 @@ class _RestaurantReviewState extends State<RestaurantReview> {
           child: ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(10)),
             child: LinearProgressIndicator(
-              value: i / 10 as double,
+              value:
+                  widget.restaurantModel.ratingCounts["${5 - i}"]!.toDouble(),
               valueColor: AlwaysStoppedAnimation<Color>(Colors.brown),
               backgroundColor: Colors.grey,
             ),

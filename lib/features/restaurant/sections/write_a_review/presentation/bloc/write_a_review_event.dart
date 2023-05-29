@@ -12,7 +12,7 @@ class PostReviewEvent extends WriteAReviewEvent {
   final int rating;
   final String restaurantId;
   final String userId;
-  final String userName;
+  final String userEmail;
   final String avatar;
   final int numReviews;
   final String avgRating;
@@ -26,7 +26,7 @@ class PostReviewEvent extends WriteAReviewEvent {
     required this.rating,
     required this.restaurantId,
     required this.userId,
-    required this.userName,
+    required this.userEmail,
     required this.avatar,
     this.images,
   }

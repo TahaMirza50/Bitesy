@@ -115,7 +115,7 @@ class ReviewCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-              child: Text(userName != "null" ? userName : "Anonymous",
+              child: Text(userName != "" ? userName : "Anonymous",
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:resturant_review_app/features/restaurant/presentation/bloc/restaurant_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
@@ -19,11 +21,12 @@ class RestaurantPage extends StatefulWidget {
 class _RestaurantPageState extends State<RestaurantPage> {
   bool _showAppBarBackground = false;
   late ScrollController _scrollController;
+  final RestaurantBloc restaurantBloc = RestaurantBloc();
 
   @override
   void initState() {
     super.initState();
-
+    restaurantBloc.add(RestaurantInitialEvent(id: widget.restaurantModel.id));
     _scrollController = ScrollController();
     _scrollController.addListener(_onScroll);
   }
@@ -61,7 +64,31 @@ class _RestaurantPageState extends State<RestaurantPage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: _buildAppBar(),
-      body: _buildBody(),
+      body: BlocConsumer<RestaurantBloc, RestaurantState>(
+        bloc: restaurantBloc,
+        listenWhen: (previous, current) => current is RestaurantActionEvent,
+        buildWhen: (previous, current) => current is! RestaurantActionEvent,
+        listener: (context, state) {
+          // TODO: implement listener
+        },
+        builder: (context, state) {
+          switch (state.runtimeType) {
+            case RestaurantLoadingState:
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            case RestaurantSuccessState:
+              final restaurant = (state as RestaurantSuccessState).restaurant;
+              return _buildBody(restaurant: restaurant);
+            case RestaurantErrorState:
+              return const Center(
+                child: Text('Error'),
+              );
+            default:
+              return Container();
+          }
+        },
+      ),
       persistentFooterButtons: [
         Container(
           width: MediaQuery.of(context).size.width,
@@ -78,7 +105,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     );
   }
 
-  SingleChildScrollView _buildBody() {
+  SingleChildScrollView _buildBody({required RestaurantModel restaurant}) {
     return SingleChildScrollView(
       controller: _scrollController,
       child: Container(
@@ -86,8 +113,8 @@ class _RestaurantPageState extends State<RestaurantPage> {
           children: [
             Stack(
               children: [
-                _buildCarousel(),
-                _buildOverlayedContent(),
+                _buildCarousel(images: restaurant.images),
+                _buildOverlayedContent(restaurant: restaurant),
               ],
             ),
             Padding(
@@ -95,14 +122,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  // an array of icon button call with text label call and a circular background in grey color
-
                   _buildIconButton(
                       icon: Icons.call_outlined,
                       label: 'Call',
                       onTap: () async {
-                        final call = Uri.parse(
-                            'tel:+${widget.restaurantModel.phoneNum}');
+                        final call = Uri.parse('tel:+${restaurant.phoneNum}');
                         if (await canLaunchUrl(call)) {
                           launchUrl(call);
                         } else {
@@ -115,7 +139,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                       label: 'Map',
                       onTap: () async {
                         final uri = Uri.parse(
-                            'google.navigation:q=${widget.restaurantModel.latitude},${widget.restaurantModel.longitude}&mode=d');
+                            'google.navigation:q=${restaurant.latitude},${restaurant.longitude}&mode=d');
                         if (await canLaunchUrl(uri)) {
                           await launchUrl(uri);
                         } else {
@@ -123,13 +147,11 @@ class _RestaurantPageState extends State<RestaurantPage> {
                         }
                       }),
                   const SizedBox(width: 8),
-
                   _buildIconButton(
                       icon: Icons.link_outlined,
                       label: 'Web',
                       onTap: () async {
-                        final Uri url =
-                            Uri.parse(widget.restaurantModel.website);
+                        final Uri url = Uri.parse(restaurant.website);
                         print("Hello world");
                         if (await canLaunchUrl(url)) {
                           launchUrl(url);
@@ -140,9 +162,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 ],
               ),
             ),
-            RestaurantMenu(restaurantModel: widget.restaurantModel),
-            RestaurantInfo(restaurantModel: widget.restaurantModel),
-            RestaurantReview(restaurantModel: widget.restaurantModel)
+            RestaurantMenu(restaurantModel: restaurant),
+            RestaurantInfo(restaurantModel: restaurant),
+            RestaurantReview(restaurantModel: restaurant)
           ],
         ),
       ),
@@ -188,7 +210,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
     );
   }
 
-  Container _buildOverlayedContent() {
+  Container _buildOverlayedContent({required RestaurantModel restaurant}) {
     return Container(
       padding: EdgeInsets.all(16.0),
       margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
@@ -197,7 +219,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            widget.restaurantModel.name,
+            restaurant.name,
             style: TextStyle(
               fontSize: 30,
               fontWeight: FontWeight.w900,
@@ -211,8 +233,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
                 Star(width: 25, height: 25, color: Colors.amber, starSize: 20),
               SizedBox(width: 4),
               Text(
-                double.parse(widget.restaurantModel.avgRating)
-                    .toStringAsFixed(1),
+                double.parse(restaurant.avgRating).toStringAsFixed(1),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
@@ -221,7 +242,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
               ),
               SizedBox(width: 4),
               Text(
-                '(${widget.restaurantModel.numReviews} reviews)',
+                '(${restaurant.numReviews} reviews)',
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w900,
@@ -236,63 +257,27 @@ class _RestaurantPageState extends State<RestaurantPage> {
     );
   }
 
-  CarouselSlider _buildCarousel() {
+  CarouselSlider _buildCarousel({required List<String> images}) {
+    print(images);
     return CarouselSlider(
       items: [
-        //1st Image of Slider
-        Container(
-          color: Colors.black,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Image.asset('assets/images/resturantpage.jpg',
-                      fit: BoxFit.cover),
+        for (final image in images)
+          Container(
+            color: Colors.black,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Opacity(
+                    opacity: 0.8,
+                    child: Image.network(image, fit: BoxFit.cover),
+                  ),
                 ),
-              ),
-              Container(
-                color: Color.fromRGBO(5, 65, 196, 0.19),
-              ),
-            ],
-          ),
-        ),
-        //2nd Image of Slider
-        Container(
-          color: Colors.black,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Image.asset('assets/images/resturantpage.jpg',
-                      fit: BoxFit.cover),
+                Container(
+                  color: Color.fromRGBO(5, 65, 196, 0.19),
                 ),
-              ),
-              Container(
-                color: Color.fromRGBO(5, 65, 196, 0.19),
-              ),
-            ],
-          ),
-        ),
-        //3rd Image of Slider
-        Container(
-          color: Colors.black,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Opacity(
-                  opacity: 0.8,
-                  child: Image.asset('assets/images/resturantpage.jpg',
-                      fit: BoxFit.cover),
-                ),
-              ),
-              Container(
-                color: Color.fromRGBO(5, 65, 196, 0.19),
-              ),
-            ],
-          ),
-        ),
+              ],
+            ),
+          )
       ],
 
       //Slider Container properties

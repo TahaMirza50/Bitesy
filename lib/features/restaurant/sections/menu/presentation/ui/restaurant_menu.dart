@@ -37,7 +37,7 @@ class RestaurantMenu extends StatelessWidget {
                                       child: ClipRRect(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(0.0)),
-                                        child: Image.asset(
+                                        child: Image.network(
                                           restaurantModel.menu,
                                           fit: BoxFit.cover,
                                           height: 400.0,

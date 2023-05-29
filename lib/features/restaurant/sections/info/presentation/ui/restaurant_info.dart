@@ -14,7 +14,9 @@ class RestaurantInfo extends StatefulWidget {
 }
 
 class _RestaurantInfoState extends State<RestaurantInfo> {
-  final LatLng restaurantLocation = LatLng(37.7749, -122.4194);
+  late final LatLng restaurantLocation = LatLng(
+      double.parse(widget.restaurantModel.latitude),
+      double.parse(widget.restaurantModel.longitude));
 
   GoogleMapController? _mapController;
 
@@ -48,7 +50,7 @@ class _RestaurantInfoState extends State<RestaurantInfo> {
             const SizedBox(height: 24),
             _buildInfoTab(
                 header: "Call",
-                subheader: '+${widget.restaurantModel.phoneNum}',
+                subheader: '${widget.restaurantModel.phoneNum}',
                 icon: Icons.call_outlined),
             const SizedBox(height: 24),
             _buildGoogleMaps(),
