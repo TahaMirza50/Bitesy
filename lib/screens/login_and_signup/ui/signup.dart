@@ -5,6 +5,7 @@ import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
 import 'package:resturant_review_app/constants/constants.dart';
 import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
+import 'package:resturant_review_app/screens/admin_page/ui/image_helper.dart';
 import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
 import 'package:resturant_review_app/screens/login_and_signup/repository/user_repository.dart';
 import 'package:resturant_review_app/screens/home.dart';
@@ -29,6 +30,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController _lastNameController = TextEditingController();
   final formKey = GlobalKey<FormState>();
   final subFormKey = GlobalKey<FormState>();
+  final UploadImage uploadImage = UploadImage();
 
   static Future<User?> signInUsingEmailPassword(
       {required String email,
@@ -115,6 +117,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     key: formKey,
                     child: Column(
                       children: [
+                        ImageField(uploadImage),
+                        const SizedBox(
+                          height: 20,
+                        ),
                         dataField(context),
                         const SizedBox(
                           height: 20,
@@ -260,13 +266,22 @@ class _SignUpPageState extends State<SignUpPage> {
                                 password: _passController1.text,
                                 context: context);
                             if (user != null) {
+                              final String image;
+                              if (uploadImage.getImage() != null) {
+                                image = await uploadImage
+                                    .upLoadToFirebase(_emailController.text);
+                              } else {
+                                image =
+                                    'https://firebasestorage.googleapis.com/v0/b/bitesy-fa8bc.appspot.com/o/default%20avatar%2F804946.png?alt=media&token=b355751e-c501-4740-b263-2204d5e971d5';
+                              }
                               final userModel = UserModel(
                                   id: FirebaseAuth.instance.currentUser!.uid,
                                   firstName: _firstNameController.text.trim(),
                                   lastName: _lastNameController.text.trim(),
                                   email: _emailController.text.trim(),
                                   gender: currentSelectedGender,
-                                  role: 'user');
+                                  role: 'user',
+                                  avatar: image);
                               ResponseUser response =
                                   await UserRepository.addUser(userModel);
                               if (response.getStatus == 400) {
@@ -482,6 +497,64 @@ class _SignUpPageState extends State<SignUpPage> {
           ],
         ),
       ],
+    );
+  }
+
+  Widget ImageField(UploadImage uploadImage) {
+    return Container(
+      width: 200,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.grey)),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 15, top: 15, bottom: 15),
+        child: Row(
+          children: [
+            const Icon(
+              Icons.image,
+              color: Colors.brown,
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Expanded(
+                child: uploadImage.getImage() != null
+                    ? Container(
+                      clipBehavior: Clip.hardEdge,
+                        decoration: BoxDecoration(shape: BoxShape.circle),
+                        height: 100,
+                        child: Image.file(
+                            fit: BoxFit.cover,
+                            uploadImage.getImage()!.absolute),
+                      )
+                    : Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.grey,
+                          shape: BoxShape.circle,
+                        ),
+                        height: 100,
+                        child: Image.network(
+                            fit: BoxFit.cover,
+                            'https://firebasestorage.googleapis.com/v0/b/bitesy-fa8bc.appspot.com/o/default%20avatar%2F804946.png?alt=media&token=b355751e-c501-4740-b263-2204d5e971d5'),
+                      )),
+            IconButton(
+              onPressed: () async {
+                if (uploadImage.getImage() != null) {
+                  await uploadImage.removeImage();
+                  setState(() {});
+                } else {
+                  await uploadImage.getGalleryImage();
+                  setState(() {});
+                }
+              },
+              icon: uploadImage.getImage() != null
+                  ? const Icon(Icons.delete)
+                  : const Icon(Icons.add_a_photo),
+              color: Colors.grey,
+            )
+          ],
+        ),
+      ),
     );
   }
 }

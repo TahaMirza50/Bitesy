@@ -54,6 +54,7 @@ class UserRepository {
       lastName: "",
       gender: "",
       role: "",
+      avatar: "https://firebasestorage.googleapis.com/v0/b/bitesy-fa8bc.appspot.com/o/default%20avatar%2F804946.png?alt=media&token=b355751e-c501-4740-b263-2204d5e971d5"
     ));
     try {
       QuerySnapshot snapshot = await _users
