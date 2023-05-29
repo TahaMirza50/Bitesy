@@ -293,6 +293,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
   }
 
   AppBar _buildAppBar() => AppBar(
+        centerTitle: true,
         elevation: _showAppBarBackground ? 4.0 : 0.0,
         backgroundColor:
             _showAppBarBackground ? Colors.white : Colors.transparent,

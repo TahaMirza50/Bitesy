@@ -5,6 +5,7 @@ class UserModel {
   final String email;
   final String gender;
   final String role;
+  final String avatar;
 
   UserModel({
     required this.id,
@@ -13,6 +14,7 @@ class UserModel {
     required this.email,
     required this.gender,
     required this.role,
+    required this.avatar,
   });
 
    Map<String, dynamic> toJson() {
@@ -22,7 +24,8 @@ class UserModel {
       'Last Name': lastName,
       'Email': email,
       'Gender': gender,
-      'Role': role
+      'Role': role,
+      'Avatar' : avatar
     };
   }
 
@@ -33,7 +36,8 @@ class UserModel {
         lastName: json['Last Name'] as String? ?? "field empty",
         email: json['Email'] as String? ?? "field empty",
         gender: json['Gender'] as String? ?? "field empty",
-        role: json['Role'] as String? ?? "field empty");
+        role: json['Role'] as String? ?? "field empty",
+        avatar: json['Avatar'] as String? ?? "field empty");
   }
 
   String get userRole {

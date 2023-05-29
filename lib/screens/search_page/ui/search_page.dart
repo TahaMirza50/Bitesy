@@ -71,14 +71,20 @@ class _SearchPageState extends State<SearchPage> {
                 appBar: _buildAppBar(context),
                 body: Padding(
                   padding: const EdgeInsets.all(16.0),
-                  child: ListView.builder(
-                      itemCount: successState.restaurants.length,
-                      itemBuilder: (context, index) {
-                        return RestaurantTile(
-                          restaurantBloc: searchPageBloc,
-                          restaurantModel: successState.restaurants[index],
-                        );
-                      }),
+                  child: RefreshIndicator(
+                    onRefresh: () async {
+                      _restaurantName.clear();
+                      search = false;
+                      searchPageBloc.add(SearchPageInitialEvent());},
+                    child: ListView.builder(
+                        itemCount: successState.restaurants.length,
+                        itemBuilder: (context, index) {
+                          return RestaurantTile(
+                            restaurantBloc: searchPageBloc,
+                            restaurantModel: successState.restaurants[index],
+                          );
+                        }),
+                  ),
                 ),
               );
             case SearchPageErrorState:
@@ -142,14 +148,8 @@ class _SearchPageState extends State<SearchPage> {
                     fontSize: 25),
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
-                      onPressed: () {
-                        if (search) {
-                          search = false;
-                          _restaurantName.clear();
-                          searchPageBloc.add(SearchPageInitialEvent());
-                        }
-                      },
-                      icon: Icon(Icons.clear),
+                      onPressed: _restaurantName.clear,
+                      icon: const Icon(Icons.clear),
                     ),
                     hintText: 'Type Something...',
                     hintStyle: const TextStyle(
@@ -209,9 +209,14 @@ class _SearchPageState extends State<SearchPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 40,
+                      Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        height: 100,
+                        child: Image.network(
+                            userModel.avatar,
+                          fit: BoxFit.cover,),
                       ),
                       const SizedBox(
                         height: 10,
@@ -280,10 +285,16 @@ class _SearchPageState extends State<SearchPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CircleAvatar(
-                      backgroundColor: Colors.black,
-                      radius: 40,
-                    ),
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        height: 100,
+                        child: Image.network(
+                            userModel.avatar,
+                          fit: BoxFit.cover,),
+                      ),
                     const SizedBox(
                       height: 10,
                     ),
