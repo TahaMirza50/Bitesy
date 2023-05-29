@@ -258,7 +258,16 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                 website: _websiteController.text,
                                 description: _descController.text,
                                 numReviews: 0,
+                                latitude: "37.7749",
+                                longitude: "-122.4194",
                                 avgRating: "0.0",
+                                ratingCounts: {
+                                  '5': 0,
+                                  '4': 0,
+                                  '3': 0,
+                                  '2': 0,
+                                  '1': 0
+                                },
                                 images: [imageOne, imageTwo, imageThree],
                                 menu: imageMenu);
                             Response response =

@@ -1,45 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
+import 'package:share_plus/share_plus.dart';
 
 import '../../../widgets/star.dart';
 
 class ReviewCard extends StatelessWidget {
-  // final String profileUrl;
-  // final String name;
-  // final String review;
+  final RestaurantReviewModel review;
 
-  const ReviewCard({super.key});
+  const ReviewCard({super.key, required this.review});
+
+  void shareContent() async {
+  try {
+    await Share.share("Check out this review: ${review.review}");
+    
+    print('Share completed successfully.');
+  } catch (e) {
+    print('Error sharing: $e');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
     return IntrinsicHeight(
       child: Column(
         children: [
-          _buildUserProfile(),
+          _buildUserProfile(review.userName, review.avatar),
           const SizedBox(height: 4),
-          _buildRatingStars(),
-          _buildReviewContent(),
-          _buildButtonRow(),
+          _buildRatingStars(review.rating),
+          _buildReviewContent(review.review),
           const SizedBox(height: 8),
+          Row(
+            children: [
+              // create a small sized image that enlarges when clickedd
+              _buildReviewImage(context),
+              const SizedBox(width: 8),
+              _buildReviewImage(context),
+              const SizedBox(width: 8),
+              _buildReviewImage(context),
+            ],
+          ),
+          _buildButtonRow(),
         ],
       ),
     );
   }
 
-  Padding _buildReviewContent() {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Text(
-          "Lorem ipsum idor Lorem ipsum idor Lorem ipsum idor Lorem ipsum idor Lorem ipsum idor Lorem ipsum idor",
-          style: TextStyle(fontSize: 16, color: Colors.grey[850])),
+  GestureDetector _buildReviewImage(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return Dialog(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Container(
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(0.0)),
+                                child: Image.asset(
+                                  "assets/images/menu_images/manu.webp",
+                                  fit: BoxFit.cover,
+                                  height: 400.0,
+                                ),
+                              ),
+                            )
+                          ]),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+      child: Image.asset("assets/images/menu_images/manu.webp",
+          height: 50, width: 50),
     );
   }
 
-  Row _buildUserProfile() {
+  Align _buildReviewContent(String reviewContent) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: Text(reviewContent,
+            style: TextStyle(fontSize: 16, color: Colors.grey[850])),
+      ),
+    );
+  }
+
+  Row _buildUserProfile(String userName, String avatar) {
+    print(userName);
     return Row(
       children: [
-        const CircleAvatar(
-          backgroundImage:
-              NetworkImage('https://www.woolha.com/media/2020/03/eevee.png'),
+        CircleAvatar(
+          backgroundImage: NetworkImage(avatar),
         ),
         const SizedBox(width: 8),
         Column(
@@ -48,7 +115,7 @@ class ReviewCard extends StatelessWidget {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-              child: const Text('Alfred L.',
+              child: Text(userName != "" ? userName : "Anonymous",
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
@@ -98,19 +165,19 @@ class ReviewCard extends StatelessWidget {
           label: const Text('Funny'),
         ),
         OutlinedButton.icon(
-          onPressed: () {},
-          icon: const Icon(Icons.sentiment_very_dissatisfied_outlined),
-          label: const Text('Dislike'),
+          onPressed: shareContent,
+          icon: const Icon(Icons.share_outlined),
+          label: const Text('Share'),
         ),
       ],
     );
   }
 
-  Row _buildRatingStars() {
+  Row _buildRatingStars(int rating) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        for (var i = 0; i < 4; i++)
+        for (var i = 0; i < rating; i++)
           const Star(width: 25, height: 25, starSize: 15, color: Colors.brown),
       ],
     );
