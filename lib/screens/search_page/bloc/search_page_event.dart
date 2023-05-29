@@ -7,7 +7,8 @@ class SearchPageInitialEvent extends SearchPageEvent {}
 
 class SearchButtonPressedEvent extends SearchPageEvent {
   final String restaurantName;
-  SearchButtonPressedEvent(this.restaurantName);
+  final String currentRating;
+  SearchButtonPressedEvent(this.restaurantName,this.currentRating);
 }
 
 class NavigateToRestaurantPageEvent extends SearchPageEvent {
