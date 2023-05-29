@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:resturant_review_app/screens/home.dart';
 import 'package:resturant_review_app/screens/login_and_signup/ui/login.dart';
 import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
 import 'package:resturant_review_app/screens/login_and_signup/ui/signup.dart';

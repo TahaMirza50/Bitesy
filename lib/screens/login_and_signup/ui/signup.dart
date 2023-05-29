@@ -8,7 +8,6 @@ import 'package:resturant_review_app/features/restaurant/presentation/ui/restaur
 import 'package:resturant_review_app/screens/admin_page/ui/image_helper.dart';
 import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
 import 'package:resturant_review_app/screens/login_and_signup/repository/user_repository.dart';
-import 'package:resturant_review_app/screens/home.dart';
 import 'package:resturant_review_app/screens/login_and_signup/ui/login.dart';
 import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
 

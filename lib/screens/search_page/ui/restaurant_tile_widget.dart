@@ -46,7 +46,7 @@ class RestaurantTile extends StatelessWidget {
                             const Star(
                                 width: 25,
                                 height: 25,
-                                color: Colors.brown,
+                                color: Colors.amber,
                                 starSize: 20),
                         ],
                       ),
@@ -77,7 +77,7 @@ class RestaurantTile extends StatelessWidget {
                 ],
               ),
               Text(
-                restaurantModel.description,
+                restaurantModel.address,
                 style: const TextStyle(
                     color: Colors.black,
                     fontSize: 15,
