@@ -207,9 +207,14 @@ class _SearchPageState extends State<SearchPage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const CircleAvatar(
-                        backgroundColor: Colors.black,
-                        radius: 40,
+                      Container(
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        height: 100,
+                        child: Image.network(
+                            userModel.avatar,
+                          fit: BoxFit.cover,),
                       ),
                       const SizedBox(
                         height: 10,
@@ -278,10 +283,16 @@ class _SearchPageState extends State<SearchPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const CircleAvatar(
-                      backgroundColor: Colors.black,
-                      radius: 40,
-                    ),
+                      Container(
+                        clipBehavior: Clip.hardEdge,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        height: 100,
+                        child: Image.network(
+                            userModel.avatar,
+                          fit: BoxFit.cover,),
+                      ),
                     const SizedBox(
                       height: 10,
                     ),

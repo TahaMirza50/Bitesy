@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:regexed_validator/regexed_validator.dart';
 import 'package:resturant_review_app/constants/constants.dart';
-import 'package:resturant_review_app/screens/admin_page/ui/utilities.dart';
+import 'package:resturant_review_app/screens/admin_page/ui/image_helper.dart';
 import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
 import 'package:resturant_review_app/screens/search_page/repository/restaurant_repo.dart';
 
@@ -235,33 +235,7 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                 uploadImageTwo.getImage() == null ||
                                 uploadImageThree.getImage() == null ||
                                 uploadImageMenu.getImage() == null) {
-                              showDialog(
-                                context: context,
-                                barrierDismissible: false,
-                                builder: (BuildContext context) {
-                                  return ClipRRect(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(16.0)),
-                                    child: AlertDialog(
-                                      title: const Text(
-                                        "Error",
-                                        style: TextStyle(
-                                            color: Colors.brown,
-                                            fontWeight: FontWeight.bold),
-                                      ),
-                                      content: const Text("Upload all images."),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text("OK"),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
+                              ErrorMessage();
                               return;
                             }
                             setState(() {
@@ -312,8 +286,8 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                       fontWeight: FontWeight.bold),
                                 )
                               : const CircularProgressIndicator(
-                                color: Colors.white,
-                              )),
+                                  color: Colors.white,
+                                )),
                     ),
                   ],
                 ),
@@ -344,13 +318,17 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
             ),
             Expanded(
                 child: uploadImage.getImage() != null
-                    ? SizedBox(
+                    ? Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16)),
                         height: 100,
                         child: Image.file(uploadImage.getImage()!.absolute),
                       )
                     : Container(
+                        decoration: BoxDecoration(
+                          color: Colors.grey,
+                            borderRadius: BorderRadius.circular(16)),
                         height: 100,
-                        color: Colors.white,
                       )),
             IconButton(
               onPressed: () async {
@@ -410,6 +388,34 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
       onChanged: (value) {},
       keyboardType: keyboardType,
       textInputAction: TextInputAction.next,
+    );
+  }
+
+  Future<Widget> ErrorMessage() async {
+    return await showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return ClipRRect(
+          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+          child: AlertDialog(
+            title: const Text(
+              "Error",
+              style:
+                  TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),
+            ),
+            content: const Text("Upload all images."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text("OK"),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
