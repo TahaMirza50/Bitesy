@@ -19,8 +19,8 @@ class ReviewBloc extends Bloc<ReviewEvent, ReviewState> {
       ReviewInitialEvent event, Emitter<ReviewState> emit) async {
     print("Review Initial Event");
     emit(ReviewLoadingState());
-    Response response =
-        await RestaurantReviewRepository.fetchRestaurantReviews(event.restaurantId);
+    Response response = await RestaurantReviewRepository.fetchRestaurantReviews(
+        event.restaurantId);
 
     if (response.status == 200) {
       emit(ReviewSuccessState(reviews: response.reviewList));

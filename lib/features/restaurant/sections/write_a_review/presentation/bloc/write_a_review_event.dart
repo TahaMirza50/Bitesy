@@ -16,7 +16,7 @@ class PostReviewEvent extends WriteAReviewEvent {
   final String avatar;
   final int numReviews;
   final String avgRating;
-  final List<String>? images;
+  final List<File>? images;
 
   const PostReviewEvent(
     {

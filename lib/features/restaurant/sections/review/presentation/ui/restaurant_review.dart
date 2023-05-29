@@ -93,7 +93,7 @@ class _RestaurantReviewState extends State<RestaurantReview> {
               const SizedBox(height: 8),
               _buildPostReviewCard(context),
               const SizedBox(height: 8),
-              _buildButtonRow(),
+              // _buildButtonRow(),
             ],
           ),
         ),
@@ -126,6 +126,7 @@ class _RestaurantReviewState extends State<RestaurantReview> {
                     itemBuilder: (context, index) {
                       return ReviewCard(
                         review: reviews[index],
+                        reviewBloc: reviewBloc,
                       );
                     })
               ],
@@ -189,7 +190,7 @@ class _RestaurantReviewState extends State<RestaurantReview> {
             borderRadius: BorderRadius.all(Radius.circular(10)),
             child: LinearProgressIndicator(
               value:
-                  widget.restaurantModel.ratingCounts["${5 - i}"]!.toDouble(),
+                  widget.restaurantModel.ratingCounts["${5 - i}"]!.toDouble() / widget.restaurantModel.numReviews.toDouble(),
               valueColor: AlwaysStoppedAnimation<Color>(Colors.brown),
               backgroundColor: Colors.grey,
             ),
@@ -250,12 +251,12 @@ class _RestaurantReviewState extends State<RestaurantReview> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
-        const SizedBox(
+        SizedBox(
           width: 170,
           child: ReviewOutlinedButton(
               label: "Add Photo", icon: Icons.camera_alt_outlined),
         ),
-        const SizedBox(
+        SizedBox(
           width: 170,
           child: ReviewOutlinedButton(
               label: "Check In", icon: Icons.check_circle_outline),

@@ -16,6 +16,7 @@ class ReviewInitialEvent extends ReviewEvent {
   const ReviewInitialEvent({required this.restaurantId});
 }
 
+
 class NavigateToWriteAReviewEvent extends ReviewActionEvent {
   const NavigateToWriteAReviewEvent();
 }

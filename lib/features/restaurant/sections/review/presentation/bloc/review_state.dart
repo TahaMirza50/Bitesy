@@ -20,4 +20,7 @@ class ReviewErrorState extends ReviewState {
   ReviewErrorState({required this.message});
 }
 
+class ReviewReportLoadingState extends ReviewState {}
+
+class ReviewReportSuccessState extends ReviewState {}
 class NavigateToWriteAReviewActionState extends ReviewActionState {}

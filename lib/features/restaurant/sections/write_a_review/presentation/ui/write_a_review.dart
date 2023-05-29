@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
@@ -18,10 +22,37 @@ class WriteAReview extends StatefulWidget {
 
 class _WriteAReviewState extends State<WriteAReview> {
   int starsSelected = 0;
+  List<File> _selectedImages = [];
 
   void setStarsSelected(int i) {
     setState(() {
       starsSelected = i;
+    });
+  }
+
+  void selectImage() async {
+    if (_selectedImages.length < 3) {
+      final picker = ImagePicker();
+      final pickedImage =
+          await picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+
+      if (pickedImage != null) {
+        setState(() {
+          _selectedImages.add(File(pickedImage.path));
+        });
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("You can only upload 3 images"),
+        ),
+      );
+    }
+  }
+
+  void _removeImage(int index) {
+    setState(() {
+      _selectedImages.removeAt(index);
     });
   }
 
@@ -84,6 +115,8 @@ class _WriteAReviewState extends State<WriteAReview> {
                     const SizedBox(height: 16),
                     _buildReviewTextArea(textarea, formKey),
                     const SizedBox(height: 16),
+                    _buildCameraButton(),
+                    const SizedBox(height: 16),
                     SizedBox(
                       width: MediaQuery.of(context).size.width / 2,
                       child: ElevatedButton(
@@ -96,10 +129,10 @@ class _WriteAReviewState extends State<WriteAReview> {
                                 "https://www.woolha.com/media/2020/03/eevee.png",
                             rating: starsSelected,
                             review: textarea.text,
+                            images: _selectedImages,
                             userId: FirebaseAuth.instance.currentUser!.uid
                                 .toString(),
-                            userEmail: FirebaseAuth
-                                .instance.currentUser!.email
+                            userEmail: FirebaseAuth.instance.currentUser!.email
                                 .toString(),
                           ));
                         },
@@ -181,7 +214,7 @@ class _WriteAReviewState extends State<WriteAReview> {
           ),
           onChanged: (value) {},
           keyboardType: TextInputType.multiline,
-          textInputAction: TextInputAction.done,
+          textInputAction: TextInputAction.next,
           validator: (value) {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
@@ -256,5 +289,85 @@ class _WriteAReviewState extends State<WriteAReview> {
         ),
       ],
     );
+  }
+
+  _buildCameraButton() {
+    if (_selectedImages.isNotEmpty) {
+      return Row(
+        children: [
+          Center(
+            child: DottedBorder(
+              strokeWidth: 1,
+              dashPattern: [8, 4],
+              strokeCap: StrokeCap.round,
+              radius: const Radius.circular(20),
+              color: Colors.grey,
+              child: Container(
+                child: IconButton(
+                  onPressed: selectImage,
+                  icon: const Icon(Icons.camera_alt_outlined),
+                ),
+              ),
+            ),
+          ),
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(
+                _selectedImages.length,
+                (index) => Stack(
+                  children: [
+                    Container(
+                      width: 60,
+                      height: 60,
+                      margin: EdgeInsets.all(8),
+                      child: Image.file(
+                        _selectedImages[index],
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: GestureDetector(
+                          onTap: () => _removeImage(index),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey[500],
+                            ),
+                            padding: EdgeInsets.all(2),
+                            child: Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 16,
+                            ),
+                          )),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      );
+    } else {
+      return Center(
+        child: DottedBorder(
+          strokeWidth: 1,
+          dashPattern: [8, 4],
+          strokeCap: StrokeCap.round,
+          radius: const Radius.circular(20),
+          color: Colors.grey,
+          child: Container(
+            width: MediaQuery.of(context).size.width - 40,
+            child: IconButton(
+              onPressed: selectImage,
+              icon: const Icon(Icons.camera_alt_outlined),
+            ),
+          ),
+        ),
+      );
+    }
   }
 }

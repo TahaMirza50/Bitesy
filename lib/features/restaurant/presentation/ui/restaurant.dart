@@ -41,11 +41,9 @@ class _RestaurantPageState extends State<RestaurantPage> {
     try {
       await Share.share(
           '''Check out this restaurant: ${widget.restaurantModel.name}\n'''
-          '''Website: ${widget.restaurantModel.website}\n'''
           '''Phone: ${widget.restaurantModel.phoneNum}\n'''
           '''Website: ${widget.restaurantModel.website}\n'''
-          '''Address: ${widget.restaurantModel.address}\n'''
-          '''Rating: ${double.parse(widget.restaurantModel.avgRating).toStringAsFixed(1)}\n''');
+          '''Address: ${widget.restaurantModel.address}\n''');
 
       print('Share completed successfully.');
     } catch (e) {
