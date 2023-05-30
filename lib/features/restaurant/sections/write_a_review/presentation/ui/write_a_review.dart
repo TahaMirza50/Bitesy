@@ -62,9 +62,6 @@ class _WriteAReviewState extends State<WriteAReview> {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController textarea = TextEditingController();
-    final formKey = GlobalKey<FormState>();
-
     return Scaffold(
       body: BlocConsumer<WriteAReviewBloc, WriteAReviewState>(
         bloc: writeAReviewBloc,
