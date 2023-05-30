@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:resturant_review_app/features/restaurant/presentation/bloc/restaurant_bloc.dart';
+import 'package:Bitesy/features/restaurant/presentation/bloc/restaurant_bloc.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:resturant_review_app/features/restaurant/sections/info/presentation/ui/restaurant_info.dart';
-import 'package:resturant_review_app/features/restaurant/sections/menu/presentation/ui/restaurant_menu.dart';
-import 'package:resturant_review_app/features/restaurant/sections/review/presentation/ui/restaurant_review.dart';
-import 'package:resturant_review_app/features/restaurant/widgets/star.dart';
-import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/features/restaurant/sections/info/presentation/ui/restaurant_info.dart';
+import 'package:Bitesy/features/restaurant/sections/menu/presentation/ui/restaurant_menu.dart';
+import 'package:Bitesy/features/restaurant/sections/review/presentation/ui/restaurant_review.dart';
+import 'package:Bitesy/features/restaurant/widgets/star.dart';
+import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
 
 class RestaurantPage extends StatefulWidget {
   final RestaurantModel restaurantModel;

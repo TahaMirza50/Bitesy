@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:regexed_validator/regexed_validator.dart';
-import 'package:resturant_review_app/constants/constants.dart';
-import 'package:resturant_review_app/screens/admin_page/ui/form_field.dart';
-import 'package:resturant_review_app/screens/admin_page/ui/image_helper.dart';
-import 'package:resturant_review_app/screens/admin_page/ui/location_picker.dart';
-import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
-import 'package:resturant_review_app/screens/search_page/repository/restaurant_repo.dart';
+import 'package:Bitesy/constants/constants.dart';
+import 'package:Bitesy/screens/admin_page/ui/form_field.dart';
+import 'package:Bitesy/screens/admin_page/ui/image_helper.dart';
+import 'package:Bitesy/screens/admin_page/ui/location_picker.dart';
+import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/screens/search_page/repository/restaurant_repo.dart';
 
 class AddRestaurantPage extends StatefulWidget {
   const AddRestaurantPage({super.key});

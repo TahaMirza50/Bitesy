@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:resturant_review_app/screens/search_page/bloc/search_page_bloc.dart';
+import 'package:Bitesy/screens/search_page/bloc/search_page_bloc.dart';
 import '../../../features/restaurant/widgets/star.dart';
 import '../model/restaurant_model.dart';
 

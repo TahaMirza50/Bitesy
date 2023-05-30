@@ -1,7 +1,7 @@
 // assign each star with an id initially with a transparent background
 
 import 'package:flutter/material.dart';
-import 'package:resturant_review_app/features/restaurant/widgets/star.dart';
+import 'package:Bitesy/features/restaurant/widgets/star.dart';
 
 class StarSelect extends StatelessWidget {
   final int starsSelected;
