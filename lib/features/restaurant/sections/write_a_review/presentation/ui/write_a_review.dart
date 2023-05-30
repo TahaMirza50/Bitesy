@@ -217,6 +217,9 @@ class _WriteAReviewState extends State<WriteAReview> {
             if (value == null || value.isEmpty) {
               return 'Please enter some text';
             }
+            else if (value.length > 500) {
+              return 'Word limit is 500 words';
+            }
             return null;
           }),
     );

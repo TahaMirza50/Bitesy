@@ -355,16 +355,17 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                             setState(() {
                               isLoading = true;
                             });
+                            final id = Constants.IDGenerator.v1();
                             final String imageOne = await uploadImageOne
-                                .upLoadToFirebase(_nameController.text);
+                                .upLoadToFirebase(id);
                             final String imageTwo = await uploadImageTwo
-                                .upLoadToFirebase(_nameController.text);
+                                .upLoadToFirebase(id);
                             final String imageThree = await uploadImageThree
-                                .upLoadToFirebase(_nameController.text);
+                                .upLoadToFirebase(id);
                             final String imageMenu = await uploadImageMenu
-                                .upLoadToFirebase(_nameController.text);
+                                .upLoadToFirebase(id);
                             final RestaurantModel restaurant = RestaurantModel(
-                                id: Constants.IDGenerator.v1(),
+                                id: id,
                                 name: _nameController.text,
                                 address: _addressController.text,
                                 email: _emailController.text,

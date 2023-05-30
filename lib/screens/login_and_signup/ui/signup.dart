@@ -1,3 +1,4 @@
+import 'package:Bitesy/constants/constants.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -269,7 +270,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               final String image;
                               if (uploadImage.getImage() != null) {
                                 image = await uploadImage
-                                    .upLoadToFirebase(_emailController.text);
+                                    .upLoadToFirebase(FirebaseAuth.instance.currentUser!.uid);
                               } else {
                                 image =
                                     'https://firebasestorage.googleapis.com/v0/b/bitesy-fa8bc.appspot.com/o/default%20avatar%2F804946.png?alt=media&token=b355751e-c501-4740-b263-2204d5e971d5';
