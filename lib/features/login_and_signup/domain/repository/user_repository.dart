@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:Bitesy/constants/constants.dart';
-import 'package:Bitesy/screens/login_and_signup/model/user.dart';
+import 'package:Bitesy/features/login_and_signup/data/model/user.dart';
 
 final FirebaseFirestore _firestore = Constants.firestore;
 final CollectionReference _users = _firestore.collection('users');

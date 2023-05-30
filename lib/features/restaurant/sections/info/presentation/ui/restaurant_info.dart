@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/features/search_page/data/model/restaurant_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'package:Bitesy/features/restaurant/widgets/header_text.dart';

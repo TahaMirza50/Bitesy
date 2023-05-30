@@ -8,7 +8,7 @@ import 'package:Bitesy/features/restaurant/sections/info/presentation/ui/restaur
 import 'package:Bitesy/features/restaurant/sections/menu/presentation/ui/restaurant_menu.dart';
 import 'package:Bitesy/features/restaurant/sections/review/presentation/ui/restaurant_review.dart';
 import 'package:Bitesy/features/restaurant/widgets/star.dart';
-import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/features/search_page/data/model/restaurant_model.dart';
 
 class RestaurantPage extends StatefulWidget {
   final RestaurantModel restaurantModel;

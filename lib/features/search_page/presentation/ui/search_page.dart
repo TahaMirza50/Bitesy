@@ -4,11 +4,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:Bitesy/features/restaurant/presentation/ui/restaurant.dart';
-import 'package:Bitesy/screens/admin_page/ui/add_page.dart';
-import 'package:Bitesy/screens/login_and_signup/model/user.dart';
-import 'package:Bitesy/screens/login_and_signup/repository/user_repository.dart';
-import 'package:Bitesy/screens/search_page/bloc/search_page_bloc.dart';
-import 'package:Bitesy/screens/search_page/ui/restaurant_tile_widget.dart';
+import 'package:Bitesy/features/admin_page/presentation/ui/add_page.dart';
+import 'package:Bitesy/features/login_and_signup/data/model/user.dart';
+import 'package:Bitesy/features/login_and_signup/domain/repository/user_repository.dart';
+import 'package:Bitesy/features/search_page/presentation/bloc/search_page_bloc.dart';
+import 'package:Bitesy/features/search_page/presentation/ui/restaurant_tile_widget.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
