@@ -1,7 +1,6 @@
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:Bitesy/features/restaurant/presentation/ui/restaurant.dart';
 import 'package:Bitesy/screens/search_page/ui/search_page.dart';
