@@ -7,8 +7,8 @@ import 'package:equatable/equatable.dart';
 import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../../../screens/admin_page/ui/utilities.dart';
 
+import '../../../../../../screens/admin_page/ui/image_helper.dart';
 import '../../../../../../screens/login_and_signup/repository/user_repository.dart';
 import '../../domain/repostiories/write_a_review_repo.dart';
 
