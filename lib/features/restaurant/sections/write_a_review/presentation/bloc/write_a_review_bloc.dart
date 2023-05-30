@@ -1,10 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
 import 'package:uuid/uuid.dart';
+
+import '../../../../../../screens/admin_page/ui/utilities.dart';
 
 import '../../../../../../screens/login_and_signup/repository/user_repository.dart';
 import '../../domain/repostiories/write_a_review_repo.dart';
@@ -24,13 +27,25 @@ class WriteAReviewBloc extends Bloc<WriteAReviewEvent, WriteAReviewState> {
     emit(WriteAReviewLoadingState());
 
     // fetch user details using email
-    ResponseUser userResponse = await UserRepository.fetchUserByEmail(event.userEmail);
+    ResponseUser userResponse =
+        await UserRepository.fetchUserByEmail(event.userEmail);
+    final reviewId = uuid.v4();
+    List<String> reviewImages = [];
+    // uplaod Images to firebase storage
 
+    if (event.images != null) {
+      await Future.wait(event.images!.map((element) async {
+        var url = await UploadImage(image: element).upLoadToFirebase(reviewId);
+        reviewImages.add(url);
+      }));
+    }
+
+    print("Review images $reviewImages");
     RestaurantReviewModel review = RestaurantReviewModel(
       // TODO: replace it with avatar from userResponse
       avatar: event.avatar,
-      id: uuid.v4(),
-      images: event.images != null ? event.images! : [],
+      id: reviewId,
+      images: reviewImages,
       rating: event.rating,
       restaurantId: event.restaurantId,
       review: event.review,
@@ -44,18 +59,17 @@ class WriteAReviewBloc extends Bloc<WriteAReviewEvent, WriteAReviewState> {
 
     if (response.status == 200) {
       Response response2 =
-        await WriteARestaurantReviewRepository.updateRestaurantDetails(
-            event.rating,
-            event.restaurantId,
-            event.numReviews,
-            event.avgRating);
+          await WriteARestaurantReviewRepository.updateRestaurantDetails(
+              event.rating,
+              event.restaurantId,
+              event.numReviews,
+              event.avgRating);
       if (response2.status == 200) {
         emit(NavigateToRestaurantHomeState());
       } else {
         emit(WriteAReviewErrorState(message: response2.message));
       }
-    }
-    else {
+    } else {
       emit(WriteAReviewErrorState(message: response.message));
     }
   }

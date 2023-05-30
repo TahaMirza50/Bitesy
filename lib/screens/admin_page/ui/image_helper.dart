@@ -9,6 +9,9 @@ class UploadImage{
     File? image;
     final picker = ImagePicker();
 
+    // constructor
+    UploadImage({this.image});
+
     File? getImage(){
       return image;
     }

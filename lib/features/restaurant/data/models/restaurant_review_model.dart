@@ -9,6 +9,8 @@ class RestaurantReviewModel {
   final String review;
   final int rating;
   final Timestamp timestamp;
+  final int reportCount;
+  final List<String> reportList;
   final List<String> images;
 
   RestaurantReviewModel(
@@ -20,6 +22,8 @@ class RestaurantReviewModel {
       required this.review,
       required this.rating,
       required this.timestamp,
+      this.reportCount = 0,
+      this.reportList = const [],
       required this.images});
 
   static RestaurantReviewModel fromJson(Map<String, dynamic> json) {
@@ -32,6 +36,8 @@ class RestaurantReviewModel {
         review: json['review'] as String? ?? "field empty",
         rating: json['rating'] as int? ?? 0,
         timestamp: json['timestamp'] as Timestamp? ?? Timestamp.now(),
+        reportCount: json['reportCount'] as int? ?? 0,
+        reportList: List<String>.from(json['reportList'] ?? []),
         images: List<String>.from(json['images'] ?? []));
   }
 
@@ -45,6 +51,8 @@ class RestaurantReviewModel {
       'review': review,
       'rating': rating,
       'images': images,
+      'reportCount': reportCount,
+      'reportList': reportList,
       'timestamp': timestamp,
     };
   }
