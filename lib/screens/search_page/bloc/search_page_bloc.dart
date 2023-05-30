@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:bloc/bloc.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
-import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
-import 'package:resturant_review_app/screens/login_and_signup/repository/user_repository.dart';
-import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
-import 'package:resturant_review_app/screens/search_page/repository/restaurant_repo.dart';
+import 'package:Bitesy/screens/login_and_signup/model/user.dart';
+import 'package:Bitesy/screens/login_and_signup/repository/user_repository.dart';
+import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/screens/search_page/repository/restaurant_repo.dart';
 
 part 'search_page_event.dart';
 part 'search_page_state.dart';

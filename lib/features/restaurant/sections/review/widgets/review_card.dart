@@ -2,8 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
-import 'package:resturant_review_app/features/restaurant/sections/review/domain/repositories/restaurant_review_repo.dart';
+import 'package:Bitesy/features/restaurant/data/models/restaurant_review_model.dart';
+import 'package:Bitesy/features/restaurant/sections/review/domain/repositories/restaurant_review_repo.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../widgets/star.dart';

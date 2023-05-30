@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:resturant_review_app/constants/constants.dart';
-import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/constants/constants.dart';
+import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
 import 'dart:convert';
 
 final FirebaseFirestore _firestore = Constants.firestore;

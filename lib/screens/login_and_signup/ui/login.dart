@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:go_router/go_router.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
-import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
-import 'package:resturant_review_app/screens/login_and_signup/ui/signup.dart';
+import 'package:Bitesy/features/restaurant/presentation/ui/restaurant.dart';
+import 'package:Bitesy/screens/search_page/ui/search_page.dart';
+import 'package:Bitesy/screens/login_and_signup/ui/signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

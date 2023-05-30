@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:resturant_review_app/constants/constants.dart';
+import 'package:Bitesy/constants/constants.dart';
 import 'dart:convert';
 
-import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
+import 'package:Bitesy/features/restaurant/data/models/restaurant_review_model.dart';
 
 final FirebaseFirestore _firestore = Constants.firestore;
 final CollectionReference _reviews = _firestore.collection('restaurant_review');

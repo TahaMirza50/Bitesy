@@ -5,10 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
-import 'package:resturant_review_app/features/restaurant/sections/write_a_review/presentation/bloc/write_a_review_bloc.dart';
-import 'package:resturant_review_app/features/restaurant/sections/write_a_review/presentation/widgets/star_select.dart';
-import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/features/restaurant/presentation/ui/restaurant.dart';
+import 'package:Bitesy/features/restaurant/sections/write_a_review/presentation/bloc/write_a_review_bloc.dart';
+import 'package:Bitesy/features/restaurant/sections/write_a_review/presentation/widgets/star_select.dart';
+import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
 
 import '../../../../widgets/star.dart';
 

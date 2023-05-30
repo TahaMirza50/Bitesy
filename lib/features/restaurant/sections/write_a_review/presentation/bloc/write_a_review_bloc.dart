@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
+import 'package:Bitesy/features/restaurant/data/models/restaurant_review_model.dart';
 import 'package:uuid/uuid.dart';
 
 

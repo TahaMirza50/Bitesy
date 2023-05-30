@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:resturant_review_app/features/restaurant/data/models/restaurant_review_model.dart';
-import 'package:resturant_review_app/features/restaurant/sections/review/presentation/bloc/review_bloc.dart';
-import 'package:resturant_review_app/features/restaurant/widgets/header_text.dart';
-import 'package:resturant_review_app/features/restaurant/sections/review/widgets/outlined_button.dart';
-import 'package:resturant_review_app/features/restaurant/sections/write_a_review/presentation/ui/write_a_review.dart';
+import 'package:Bitesy/features/restaurant/data/models/restaurant_review_model.dart';
+import 'package:Bitesy/features/restaurant/sections/review/presentation/bloc/review_bloc.dart';
+import 'package:Bitesy/features/restaurant/widgets/header_text.dart';
+import 'package:Bitesy/features/restaurant/sections/review/widgets/outlined_button.dart';
+import 'package:Bitesy/features/restaurant/sections/write_a_review/presentation/ui/write_a_review.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:resturant_review_app/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
 
 import '../../../../widgets/star.dart';
 import '../../widgets/review_card.dart';

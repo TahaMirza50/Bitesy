@@ -2,14 +2,11 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:go_router/go_router.dart';
-import 'package:resturant_review_app/constants/constants.dart';
-import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
-import 'package:resturant_review_app/screens/admin_page/ui/image_helper.dart';
-import 'package:resturant_review_app/screens/login_and_signup/model/user.dart';
-import 'package:resturant_review_app/screens/login_and_signup/repository/user_repository.dart';
-import 'package:resturant_review_app/screens/login_and_signup/ui/login.dart';
-import 'package:resturant_review_app/screens/search_page/ui/search_page.dart';
+import 'package:Bitesy/screens/admin_page/ui/image_helper.dart';
+import 'package:Bitesy/screens/login_and_signup/model/user.dart';
+import 'package:Bitesy/screens/login_and_signup/repository/user_repository.dart';
+import 'package:Bitesy/screens/login_and_signup/ui/login.dart';
+import 'package:Bitesy/screens/search_page/ui/search_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
