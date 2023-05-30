@@ -125,8 +125,6 @@ class _WriteAReviewState extends State<WriteAReview> {
                             numReviews: widget.restaurantModel.numReviews,
                             avgRating: widget.restaurantModel.avgRating,
                             restaurantId: widget.restaurantModel.id,
-                            avatar:
-                                "https://www.woolha.com/media/2020/03/eevee.png",
                             rating: starsSelected,
                             review: textarea.text,
                             images: _selectedImages,

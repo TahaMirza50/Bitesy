@@ -209,6 +209,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
   }
 
   Container _buildOverlayedContent({required RestaurantModel restaurant}) {
+    final int avgRating = double.parse(restaurant.avgRating).round();
     return Container(
       padding: EdgeInsets.all(16.0),
       margin: const EdgeInsets.fromLTRB(0, 100, 0, 0),
@@ -227,7 +228,7 @@ class _RestaurantPageState extends State<RestaurantPage> {
           SizedBox(height: 8),
           Row(
             children: [
-              for (int i = 0; i < 5; i++)
+              for (int i = 0; i < avgRating; i++)
                 Star(width: 25, height: 25, color: Colors.amber, starSize: 20),
               SizedBox(width: 4),
               Text(
@@ -314,13 +315,6 @@ class _RestaurantPageState extends State<RestaurantPage> {
             ),
             onPressed: shareContent,
           ),
-          // IconButton(
-          //   icon: Icon(
-          //     Icons.favorite_border,
-          //     color: _showAppBarBackground ? Colors.black : Colors.white,
-          //   ),
-          //   onPressed: () {},
-          // ),
         ],
         title: _showAppBarBackground
             ? Text(

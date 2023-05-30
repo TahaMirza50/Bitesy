@@ -178,7 +178,10 @@ class _ReviewCardState extends State<ReviewCard> {
           children: [
             Padding(
               padding: const EdgeInsets.fromLTRB(4, 0, 0, 0),
-              child: Text(userName != "" ? userName : "Anonymous",
+              child: Text(
+                  userName != ""
+                      ? userName
+                      : FirebaseAuth.instance.currentUser!.email!.split("@")[0],
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,

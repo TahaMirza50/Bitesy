@@ -7,7 +7,6 @@ import 'package:equatable/equatable.dart';
 import 'package:Bitesy/features/restaurant/data/models/restaurant_review_model.dart';
 import 'package:uuid/uuid.dart';
 
-
 import '../../../../../../screens/admin_page/ui/image_helper.dart';
 import '../../../../../../screens/login_and_signup/repository/user_repository.dart';
 import '../../domain/repostiories/write_a_review_repo.dart';
@@ -42,8 +41,7 @@ class WriteAReviewBloc extends Bloc<WriteAReviewEvent, WriteAReviewState> {
 
     print("Review images $reviewImages");
     RestaurantReviewModel review = RestaurantReviewModel(
-      // TODO: replace it with avatar from userResponse
-      avatar: event.avatar,
+      avatar: userResponse.user.avatar,
       id: reviewId,
       images: reviewImages,
       rating: event.rating,
