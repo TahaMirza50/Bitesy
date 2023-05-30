@@ -5,6 +5,7 @@ class RestaurantReviewModel {
   final String restaurantId;
   final String userId;
   final String userName;
+  final String userEmail;
   final String avatar;
   final String review;
   final int rating;
@@ -18,6 +19,7 @@ class RestaurantReviewModel {
       required this.restaurantId,
       required this.userId,
       required this.userName,
+      required this.userEmail,
       required this.avatar,
       required this.review,
       required this.rating,
@@ -32,6 +34,7 @@ class RestaurantReviewModel {
         restaurantId: json['restaurantId'] as String? ?? "field empty",
         userId: json['userId'] as String? ?? "field empty",
         userName: json['userName'] as String? ?? "field empty",
+        userEmail: json['userEmail'] as String? ?? "field empty",
         avatar: json['avatar'] as String? ?? "field empty",
         review: json['review'] as String? ?? "field empty",
         rating: json['rating'] as int? ?? 0,
@@ -47,6 +50,7 @@ class RestaurantReviewModel {
       'restaurantId': restaurantId,
       'userId': userId,
       'userName': userName,
+      'userEmail': userEmail,
       'avatar': avatar,
       'review': review,
       'rating': rating,
