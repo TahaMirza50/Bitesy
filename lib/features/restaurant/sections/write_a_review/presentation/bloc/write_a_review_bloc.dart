@@ -42,13 +42,14 @@ class WriteAReviewBloc extends Bloc<WriteAReviewEvent, WriteAReviewState> {
     print("Review images $reviewImages");
     RestaurantReviewModel review = RestaurantReviewModel(
       avatar: userResponse.user.avatar,
+      userEmail: event.userEmail,
       id: reviewId,
       images: reviewImages,
       rating: event.rating,
       restaurantId: event.restaurantId,
       review: event.review,
       userId: event.userId,
-      userName: userResponse.user.firstName,
+      userName: '${userResponse.user.firstName} ${userResponse.user.lastName}',
       timestamp: Timestamp.now(),
     );
     // Call the API to post the review

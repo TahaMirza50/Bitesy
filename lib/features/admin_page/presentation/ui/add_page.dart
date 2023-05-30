@@ -158,54 +158,6 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                             ),
                           ),
                         ),
-                        // Container(
-                        //   width: 200,
-                        //   decoration: BoxDecoration(
-                        //       borderRadius: BorderRadius.circular(16),
-                        //       border: Border.all(color: Colors.grey)),
-                        //   child: Padding(
-                        //     padding: const EdgeInsets.only(
-                        //         left: 15, top: 15, bottom: 15),
-                        //     child: Row(
-                        //       children: [
-                        //         const Icon(
-                        //           Icons.image,
-                        //           color: Colors.brown,
-                        //         ),
-                        //         const SizedBox(
-                        //           width: 5,
-                        //         ),
-                        //         Expanded(
-                        //             child: uploadImageOne.getImage() != null
-                        //                 ? SizedBox(
-                        //                     height: 100,
-                        //                     child: Image.file(uploadImageOne
-                        //                         .getImage()!
-                        //                         .absolute),
-                        //                   )
-                        //                 : Container(
-                        //                     height: 100,
-                        //                     color: Colors.white,
-                        //                   )),
-                        //         IconButton(
-                        //           onPressed: () async {
-                        //             if (uploadImageOne.getImage() != null) {
-                        //               await uploadImageOne.removeImage();
-                        //               setState(() {});
-                        //             } else {
-                        //               await uploadImageOne.getGalleryImage();
-                        //               setState(() {});
-                        //             }
-                        //           },
-                        //           icon: uploadImageOne.getImage() != null
-                        //               ? const Icon(Icons.delete)
-                        //               : const Icon(Icons.add_a_photo),
-                        //           color: Colors.grey,
-                        //         )
-                        //       ],
-                        //     ),
-                        //   ),
-                        // ),
                         ImageField(uploadImageOne),
                         const SizedBox(
                           height: 20,
@@ -301,18 +253,25 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                     const SnackBar(
                                         content: Text(
                                             "Please enter latitude and longitude")));
-                                            return;
+                                return;
                               }
-                              List<Placemark> placemarks =
-                                  await placemarkFromCoordinates(
-                                      double.parse(
-                                          _latitudeController.text.trim()),
-                                      double.parse(
-                                          _longitudeController.text.trim()));
-                              setState(() {
-                                _addressController.text =
-                                    "${placemarks[0].subLocality!}, ${placemarks[0].locality!}, ${placemarks[0].administrativeArea!}, ${placemarks[0].country}.";
-                              });
+                              try {
+                                List<Placemark> placemarks =
+                                    await placemarkFromCoordinates(
+                                        double.parse(
+                                            _latitudeController.text.trim()),
+                                        double.parse(
+                                            _longitudeController.text.trim()));
+                                setState(() {
+                                  _addressController.text =
+                                      "${placemarks[0].subLocality!}, ${placemarks[0].locality!}, ${placemarks[0].administrativeArea!}, ${placemarks[0].country}.";
+                                });
+                              } catch (e) {
+                                 ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            "Please enter correct latitude and longitude")));
+                              }
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.brown,
@@ -345,24 +304,24 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                 uploadImageTwo.getImage() == null ||
                                 uploadImageThree.getImage() == null ||
                                 uploadImageMenu.getImage() == null) {
-                               ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                        content: Text(
-                                            "Please upload all images.")));
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("Please upload all images.")));
                               return;
                             }
                             setState(() {
                               isLoading = true;
                             });
                             final id = Constants.IDGenerator.v1();
-                            final String imageOne = await uploadImageOne
-                                .upLoadToFirebase(id);
-                            final String imageTwo = await uploadImageTwo
-                                .upLoadToFirebase(id);
-                            final String imageThree = await uploadImageThree
-                                .upLoadToFirebase(id);
-                            final String imageMenu = await uploadImageMenu
-                                .upLoadToFirebase(id);
+                            final String imageOne =
+                                await uploadImageOne.upLoadToFirebase(id);
+                            final String imageTwo =
+                                await uploadImageTwo.upLoadToFirebase(id);
+                            final String imageThree =
+                                await uploadImageThree.upLoadToFirebase(id);
+                            final String imageMenu =
+                                await uploadImageMenu.upLoadToFirebase(id);
                             final RestaurantModel restaurant = RestaurantModel(
                                 id: id,
                                 name: _nameController.text,

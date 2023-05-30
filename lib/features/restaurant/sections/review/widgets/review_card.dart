@@ -78,7 +78,7 @@ class _ReviewCardState extends State<ReviewCard> {
     return IntrinsicHeight(
       child: Column(
         children: [
-          _buildUserProfile(widget.review.userName, widget.review.avatar),
+          _buildUserProfile(widget.review.userName, widget.review.userEmail, widget.review.avatar,),
           const SizedBox(height: 4),
           _buildRatingStars(widget.review.rating),
           _buildReviewContent(widget.review.review),
@@ -164,7 +164,7 @@ class _ReviewCardState extends State<ReviewCard> {
     );
   }
 
-  Row _buildUserProfile(String userName, String avatar) {
+  Row _buildUserProfile(String userName, String userEmail, String avatar) {
     print(userName);
     return Row(
       children: [
@@ -181,7 +181,7 @@ class _ReviewCardState extends State<ReviewCard> {
               child: Text(
                   userName != ""
                       ? userName
-                      : FirebaseAuth.instance.currentUser!.email!.split("@")[0],
+                      : userEmail.split("@")[0],
                   style: TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
