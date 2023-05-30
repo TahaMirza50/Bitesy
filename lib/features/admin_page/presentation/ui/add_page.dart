@@ -267,6 +267,9 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                       "${placemarks[0].subLocality!}, ${placemarks[0].locality!}, ${placemarks[0].administrativeArea!}, ${placemarks[0].country}.";
                                 });
                               } catch (e) {
+                                setState(() {
+                                  _addressController.clear();
+                                });
                                  ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
@@ -308,6 +311,13 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                   const SnackBar(
                                       content:
                                           Text("Please upload all images.")));
+                              return;
+                            }
+                            if(_addressController.text.isEmpty){
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content:
+                                          Text("Please check address.")));
                               return;
                             }
                             setState(() {
