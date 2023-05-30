@@ -60,7 +60,7 @@ class RestaurantTile extends StatelessWidget {
                     restaurantModel.name,
                     style: const TextStyle(
                         color: Colors.black,
-                        fontSize: 25,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold),
                   ),
                   Row(
@@ -68,7 +68,7 @@ class RestaurantTile extends StatelessWidget {
                       Text(restaurantModel.numReviews.toString(),
                           style: const TextStyle(
                             color: Colors.black,
-                            fontSize: 15,
+                            fontSize: 12,
                           )),
                           const SizedBox(width: 5,),
                       const Icon(Icons.reviews, color: Colors.brown),
