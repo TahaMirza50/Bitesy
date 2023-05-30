@@ -3,11 +3,11 @@ import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:Bitesy/screens/admin_page/ui/image_helper.dart';
-import 'package:Bitesy/screens/login_and_signup/model/user.dart';
-import 'package:Bitesy/screens/login_and_signup/repository/user_repository.dart';
-import 'package:Bitesy/screens/login_and_signup/ui/login.dart';
-import 'package:Bitesy/screens/search_page/ui/search_page.dart';
+import 'package:Bitesy/features/admin_page/widgets/image_helper.dart';
+import 'package:Bitesy/features/login_and_signup/data/model/user.dart';
+import 'package:Bitesy/features/login_and_signup/domain/repository/user_repository.dart';
+import 'package:Bitesy/features/login_and_signup/presentation/ui/login.dart';
+import 'package:Bitesy/features/search_page/presentation/ui/search_page.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});

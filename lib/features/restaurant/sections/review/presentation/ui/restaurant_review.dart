@@ -5,7 +5,7 @@ import 'package:Bitesy/features/restaurant/widgets/header_text.dart';
 import 'package:Bitesy/features/restaurant/sections/review/widgets/outlined_button.dart';
 import 'package:Bitesy/features/restaurant/sections/write_a_review/presentation/ui/write_a_review.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:Bitesy/screens/search_page/model/restaurant_model.dart';
+import 'package:Bitesy/features/search_page/data/model/restaurant_model.dart';
 
 import '../../../../widgets/star.dart';
 import '../../widgets/review_card.dart';

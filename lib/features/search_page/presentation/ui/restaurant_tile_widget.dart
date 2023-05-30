@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:Bitesy/screens/search_page/bloc/search_page_bloc.dart';
-import '../../../features/restaurant/widgets/star.dart';
-import '../model/restaurant_model.dart';
+import 'package:Bitesy/features/search_page/presentation/bloc/search_page_bloc.dart';
+import '../../../restaurant/widgets/star.dart';
+import '../../data/model/restaurant_model.dart';
 
 class RestaurantTile extends StatelessWidget {
   final RestaurantModel restaurantModel;

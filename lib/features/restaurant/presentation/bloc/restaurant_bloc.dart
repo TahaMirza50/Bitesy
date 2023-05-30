@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../../screens/search_page/model/restaurant_model.dart';
+import '../../../search_page/data/model/restaurant_model.dart';
 import '../../domain/repositories/restaurant_repo.dart';
 
 part 'restaurant_event.dart';

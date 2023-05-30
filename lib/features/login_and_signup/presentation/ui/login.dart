@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:Bitesy/features/restaurant/presentation/ui/restaurant.dart';
-import 'package:Bitesy/screens/search_page/ui/search_page.dart';
-import 'package:Bitesy/screens/login_and_signup/ui/signup.dart';
+import 'package:Bitesy/features/search_page/presentation/ui/search_page.dart';
+import 'package:Bitesy/features/login_and_signup/presentation/ui/signup.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
