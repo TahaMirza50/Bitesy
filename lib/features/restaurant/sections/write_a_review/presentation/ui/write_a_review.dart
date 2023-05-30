@@ -23,6 +23,8 @@ class WriteAReview extends StatefulWidget {
 class _WriteAReviewState extends State<WriteAReview> {
   int starsSelected = 0;
   List<File> _selectedImages = [];
+  TextEditingController textarea = TextEditingController();
+  final formKey = GlobalKey<FormState>();
 
   void setStarsSelected(int i) {
     setState(() {
@@ -70,6 +72,7 @@ class _WriteAReviewState extends State<WriteAReview> {
         buildWhen: (previous, current) => current is! WriteAReviewActionState,
         listener: (context, state) {
           if (state is NavigateToRestaurantHomeState) {
+            Navigator.pop(context);
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(
