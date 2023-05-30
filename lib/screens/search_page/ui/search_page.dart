@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
+import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:resturant_review_app/features/restaurant/presentation/ui/restaurant.dart';
 import 'package:resturant_review_app/constants/constants.dart';
@@ -21,6 +22,8 @@ class SearchPage extends StatefulWidget {
 
 class _SearchPageState extends State<SearchPage> {
   bool search = false;
+  String currentRating = 'None';
+
   final TextEditingController _restaurantName = TextEditingController();
   final SearchPageBloc searchPageBloc = SearchPageBloc();
 
@@ -44,14 +47,17 @@ class _SearchPageState extends State<SearchPage> {
         buildWhen: (previous, current) => current is! SearchPageActionState,
         listener: (context, state) {
           if (state is NavigateToRestaurantPageState) {
-                final navigateState = state as NavigateToRestaurantPageState;
-                print(navigateState.restaurantModel.name);
-                print("pushed");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => RestaurantPage(restaurantModel: navigateState.restaurantModel,)),
-                );
-              }
+            final navigateState = state as NavigateToRestaurantPageState;
+            print(navigateState.restaurantModel.name);
+            print("pushed");
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => RestaurantPage(
+                        restaurantModel: navigateState.restaurantModel,
+                      )),
+            );
+          }
         },
         builder: (context, state) {
           switch (state.runtimeType) {
@@ -75,7 +81,9 @@ class _SearchPageState extends State<SearchPage> {
                     onRefresh: () async {
                       _restaurantName.clear();
                       search = false;
-                      searchPageBloc.add(SearchPageInitialEvent());},
+                      currentRating = 'None';
+                      searchPageBloc.add(SearchPageInitialEvent());
+                    },
                     child: ListView.builder(
                         itemCount: successState.restaurants.length,
                         itemBuilder: (context, index) {
@@ -107,12 +115,13 @@ class _SearchPageState extends State<SearchPage> {
 
   PreferredSize _buildAppBar(context) {
     return PreferredSize(
-      preferredSize: const Size.fromHeight(200.0),
+      preferredSize: const Size.fromHeight(230.0),
       child: SafeArea(
           child: Container(
               child: AppBar(
+        shadowColor: Colors.brown,
         flexibleSpace: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 30, horizontal: 30),
+          padding: const EdgeInsets.only(bottom: 10,top: 30, right: 30,left: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -134,7 +143,7 @@ class _SearchPageState extends State<SearchPage> {
                       if (_restaurantName.text.isNotEmpty) {
                         search = true;
                         searchPageBloc.add(
-                            SearchButtonPressedEvent(_restaurantName.text));
+                            SearchButtonPressedEvent(_restaurantName.text,currentRating));
                       }
                     },
                   )
@@ -142,10 +151,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
               TextField(
                 controller: _restaurantName,
-                style: const TextStyle(
-                    decoration: TextDecoration.none,
-                    color: Colors.brown,
-                    fontSize: 25),
+                style: const TextStyle(color: Colors.brown, fontSize: 25),
                 decoration: InputDecoration(
                     suffixIcon: IconButton(
                       onPressed: _restaurantName.clear,
@@ -166,6 +172,40 @@ class _SearchPageState extends State<SearchPage> {
                       borderSide:
                           BorderSide(width: 3, color: Colors.brown.shade400),
                     )),
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  height: 60,
+                  width: 140,
+                  child: DropdownButtonFormField(
+                    iconSize: 20,
+                    style: const TextStyle(color: Colors.brown, fontSize: 15),
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 5),
+                      alignLabelWithHint: true,
+                      prefixIcon: const Icon(
+                        Icons.star,
+                        size: 20,
+                      ),
+                      border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                    ),
+                    value: currentRating,
+                    onChanged: (value) {
+                      setState(() {
+                        currentRating = value as String;
+                      });
+                    },
+                    items: ['None', '1', '2', '3', '4', '5']
+                        .map((e) => DropdownMenuItem(child: Text(e), value: e))
+                        .toList(),
+                  ),
+                ),
               )
             ],
           ),
@@ -215,8 +255,9 @@ class _SearchPageState extends State<SearchPage> {
                         ),
                         height: 100,
                         child: Image.network(
-                            userModel.avatar,
-                          fit: BoxFit.cover,),
+                          userModel.avatar,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                       const SizedBox(
                         height: 10,
@@ -285,16 +326,17 @@ class _SearchPageState extends State<SearchPage> {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                      Container(
-                        clipBehavior: Clip.hardEdge,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                        ),
-                        height: 100,
-                        child: Image.network(
-                            userModel.avatar,
-                          fit: BoxFit.cover,),
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
                       ),
+                      height: 100,
+                      child: Image.network(
+                        userModel.avatar,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                     const SizedBox(
                       height: 10,
                     ),

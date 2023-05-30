@@ -43,7 +43,7 @@ class SearchPageBloc extends Bloc<SearchPageEvent, SearchPageState> {
     await Future.delayed(const Duration(seconds: 2));
 
     final Response response =
-        await RestaurantRepository.fetchRestaurantByName(event.restaurantName);
+        await RestaurantRepository.fetchRestaurantByNameAndRating(event.restaurantName,event.currentRating);
 
     final ResponseUser responseUser = await UserRepository.fetchUserByEmail(
         FirebaseAuth.instance.currentUser!.email.toString());

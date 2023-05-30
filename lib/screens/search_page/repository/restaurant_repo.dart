@@ -11,7 +11,7 @@ class Response {
   String message;
   List<RestaurantModel> restaurantsList;
   Response({this.status = 0, this.message = "", required this.restaurantsList});
-  
+
   int get getStatus => status;
   String get getMessage => message;
 }
@@ -43,8 +43,8 @@ class RestaurantRepository {
     return response;
   }
 
-  
-  static Future<Response> fetchRestaurantByName(String name) async {
+  static Future<Response> fetchRestaurantByNameAndRating(
+      String name, String rating) async {
     List<RestaurantModel> restaurantsList = [];
 
     Response response = Response(restaurantsList: restaurantsList);
@@ -57,7 +57,16 @@ class RestaurantRepository {
           Map<String, dynamic>? documentData =
               document.data() as Map<String, dynamic>?;
           String documentName = (documentData!['name'] as String).toLowerCase();
-          if (documentName.contains(name.toLowerCase())) {
+          
+          String documentRating = documentData['avgRating'] as String;
+          int restRating = double.parse(documentRating).round();
+
+
+          if (documentName.contains(name.toLowerCase()) && rating == 'None') {
+            response.restaurantsList
+                .add(RestaurantModel.fromJson(documentData));
+          } else if (documentName.contains(name.toLowerCase()) &&
+              restRating == double.parse(rating)) {
             response.restaurantsList
                 .add(RestaurantModel.fromJson(documentData));
           }
