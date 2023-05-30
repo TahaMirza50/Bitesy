@@ -77,8 +77,8 @@ class _SearchPageState extends State<SearchPage> {
                   padding: const EdgeInsets.all(16.0),
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      _restaurantName.clear();
                       search = false;
+                      _restaurantName.clear();
                       currentRating = 'None';
                       searchPageBloc.add(SearchPageInitialEvent());
                     },
@@ -138,8 +138,7 @@ class _SearchPageState extends State<SearchPage> {
                     icon: const Icon(Icons.search),
                     color: Colors.brown,
                     onPressed: () {
-                      if (_restaurantName.text.isNotEmpty) {
-                        search = true;
+                      if (search) {
                         searchPageBloc.add(
                             SearchButtonPressedEvent(_restaurantName.text,currentRating));
                       }
@@ -148,6 +147,9 @@ class _SearchPageState extends State<SearchPage> {
                 ],
               ),
               TextField(
+                onChanged: (value) {
+                  search = true;
+                },
                 controller: _restaurantName,
                 style: const TextStyle(color: Colors.brown, fontSize: 25),
                 decoration: InputDecoration(
@@ -195,6 +197,7 @@ class _SearchPageState extends State<SearchPage> {
                     ),
                     value: currentRating,
                     onChanged: (value) {
+                      search = true;
                       setState(() {
                         currentRating = value as String;
                       });
@@ -293,7 +296,6 @@ class _SearchPageState extends State<SearchPage> {
                   FacebookAuth.instance.logOut();
                   GoogleSignIn().disconnect();
                   FirebaseAuth.instance.signOut().then((value) => {
-                        search = false,
                         Navigator.popUntil(
                           context,
                           ModalRoute.withName('/'),
@@ -360,7 +362,6 @@ class _SearchPageState extends State<SearchPage> {
                 FacebookAuth.instance.logOut();
                 GoogleSignIn().disconnect();
                 FirebaseAuth.instance.signOut().then((value) => {
-                      search = false,
                       Navigator.popUntil(
                         context,
                         ModalRoute.withName('/'),
@@ -420,7 +421,6 @@ class _SearchPageState extends State<SearchPage> {
               FacebookAuth.instance.logOut();
               GoogleSignIn().disconnect();
               FirebaseAuth.instance.signOut().then((value) => {
-                    search = false,
                     Navigator.popUntil(
                       context,
                       ModalRoute.withName('/'),
