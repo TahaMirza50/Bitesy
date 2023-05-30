@@ -61,6 +61,12 @@ dependencies:
   firebase_storage: ^11.2.1
   dotted_border: ^2.0.0+3
   geocoding: ^2.1.0
+  flutter_native_splash:
+
+
+flutter_native_splash:
+  color: "#795548"
+  image: assets/logos/Logo Final.png
 
 dev_dependencies:
   flutter_test:
@@ -89,6 +95,7 @@ flutter:
     - assets/images/
     - assets/images/login_images/
     - assets/images/menu_images/
+    - assets/logos/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
