@@ -19,6 +19,7 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  bool isLoading = false;
   var currentSelectedGender = "M";
   bool _isObscure1 = true;
   bool _isObscure2 = true;
@@ -260,6 +261,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             final subIsValid =
                                 subFormKey.currentState!.validate();
                             if (!isValid || !subIsValid) return;
+                            setState(() {
+                              isLoading = true;
+                            });
                             User? user = await signInUsingEmailPassword(
                                 email: _emailController.text,
                                 password: _passController1.text,
@@ -283,6 +287,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                   avatar: image);
                               ResponseUser response =
                                   await UserRepository.addUser(userModel);
+                                  setState(() {
+                                isLoading = false;
+                                  });
                               if (response.getStatus == 400) {
                                 showDialog(
                                   context: context,
@@ -326,13 +333,18 @@ class _SignUpPageState extends State<SignUpPage> {
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(30.0))),
                           ),
-                          child: const Text(
-                            'Sign Up',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
-                          )),
+                          child: isLoading
+                              ? const Center(
+                                  child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                ))
+                              : const Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.bold),
+                                )),
                     ),
                   ],
                 ),
@@ -519,7 +531,7 @@ class _SignUpPageState extends State<SignUpPage> {
             Expanded(
                 child: uploadImage.getImage() != null
                     ? Container(
-                      clipBehavior: Clip.hardEdge,
+                        clipBehavior: Clip.hardEdge,
                         decoration: BoxDecoration(shape: BoxShape.circle),
                         height: 100,
                         child: Image.file(
