@@ -25,7 +25,7 @@ void main() {
     });
   });
 
-  testWidgets('Should validate email and password and login',
+  testWidgets('Should validate email and password',
       (WidgetTester tester) async {
     mockNetworkImagesFor(() async {
       await tester.pumpWidget(MaterialApp(home: SignUpPage()));
