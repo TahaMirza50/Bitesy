@@ -1,4 +1,3 @@
-import 'package:Bitesy/constants/constants.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -124,6 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           height: 20,
                         ),
                         TextFormField(
+                          key: const ValueKey("email"),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (email) =>
                               email != null && !EmailValidator.validate(email)
@@ -159,10 +159,11 @@ class _SignUpPageState extends State<SignUpPage> {
                           height: 20,
                         ),
                         TextFormField(
+                          key: const ValueKey("password1"),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) =>
                               value != null && value.length < 6
-                                  ? 'Enter min. 6 character'
+                                  ? 'Enter min. 6 characters'
                                   : null,
                           controller: _passController1,
                           cursorColor: Colors.brown,
@@ -203,6 +204,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           height: 20,
                         ),
                         TextFormField(
+                          key: const ValueKey("password2"),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) => value != null &&
                                   value.compareTo(_passController1.text) != 0
@@ -254,6 +256,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 50,
                       width: MediaQuery.of(context).size.width - 40,
                       child: ElevatedButton(
+                          key: const ValueKey("signUp"),
                           onPressed: () async {
                             final isValid = formKey.currentState!.validate();
                             final subIsValid =
@@ -269,8 +272,8 @@ class _SignUpPageState extends State<SignUpPage> {
                             if (user != null) {
                               final String image;
                               if (uploadImage.getImage() != null) {
-                                image = await uploadImage
-                                    .upLoadToFirebase(FirebaseAuth.instance.currentUser!.uid);
+                                image = await uploadImage.upLoadToFirebase(
+                                    FirebaseAuth.instance.currentUser!.uid);
                               } else {
                                 image =
                                     'https://firebasestorage.googleapis.com/v0/b/bitesy-fa8bc.appspot.com/o/default%20avatar%2F804946.png?alt=media&token=b355751e-c501-4740-b263-2204d5e971d5';
@@ -285,9 +288,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                   avatar: image);
                               ResponseUser response =
                                   await UserRepository.addUser(userModel);
-                                  setState(() {
+                              setState(() {
                                 isLoading = false;
-                                  });
+                              });
                               if (response.getStatus == 400) {
                                 showDialog(
                                   context: context,
@@ -385,6 +388,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Column(
                   children: [
                     TextFormField(
+                      key: const ValueKey('firstName'),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) => value != null && value.isEmpty
                           ? 'Enter first name.'
@@ -418,6 +422,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       height: 20,
                     ),
                     TextFormField(
+                      key: const ValueKey('lastName'),
                       autovalidateMode: AutovalidateMode.onUserInteraction,
                       validator: (value) => value != null && value.isEmpty
                           ? 'Enter last name.'
