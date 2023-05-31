@@ -6,9 +6,7 @@ import 'package:Bitesy/features/login_and_signup/presentation/ui/login.dart';
 import 'package:Bitesy/features/search_page/presentation/ui/search_page.dart';
 import 'package:Bitesy/features/login_and_signup/presentation/ui/signup.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
-import 'package:twitter_login/schemes/auth_token.dart';
 import 'package:twitter_login/twitter_login.dart';
-
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,46 +16,50 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   Future<User?> signInWithTwitter({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     final twitterLogin = TwitterLogin(
-      apiKey: 'KPU7i1tFlIvuHMrW3gui5eaFn', 
-      apiSecretKey: 'WDGXfnZ0SNBNp04SBWmSwEMVHWN0zqWc0ZQSmSWlp3fw8tKdUt', 
-      redirectURI: 'twitter-login://');
+        apiKey: 'KPU7i1tFlIvuHMrW3gui5eaFn',
+        apiSecretKey: 'WDGXfnZ0SNBNp04SBWmSwEMVHWN0zqWc0ZQSmSWlp3fw8tKdUt',
+        redirectURI: 'twitter-login://');
     User? user;
-    
-    try{
+
+    try {
       final result = await twitterLogin.loginV2();
       if (result.status == TwitterLoginStatus.loggedIn) {
-        final credential = TwitterAuthProvider.credential(accessToken: result.authToken!, secret: result.authTokenSecret!);
-        UserCredential userCredential = await auth.signInWithCredential(credential);
+        final credential = TwitterAuthProvider.credential(
+            accessToken: result.authToken!, secret: result.authTokenSecret!);
+        UserCredential userCredential =
+            await auth.signInWithCredential(credential);
         user = userCredential.user;
       }
-    } on FirebaseAuthException catch (e){
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                  child: AlertDialog(
-                    title: const Text("Error",style: TextStyle(
-                          color: Colors.brown, fontWeight: FontWeight.bold),),
-                    content: Text(e.message!),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("OK"),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-            }
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            child: AlertDialog(
+              title: const Text(
+                "Error",
+                style:
+                    TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),
+              ),
+              content: Text(e.message!),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
     return user;
   }
 
@@ -65,78 +67,89 @@ class _HomePageState extends State<HomePage> {
     User? user;
     FirebaseAuth auth = FirebaseAuth.instance;
     try {
-      final result = await FacebookAuth.instance.login(permissions: ['public_profile','email']);
+      final result = await FacebookAuth.instance
+          .login(permissions: ['public_profile', 'email']);
       if (result.status == LoginStatus.success) {
-        final AccessToken accessToken = result.accessToken!; 
-        final OAuthCredential credential = FacebookAuthProvider.credential(accessToken.token);
-        UserCredential userCredential = await auth.signInWithCredential(credential);
+        final AccessToken accessToken = result.accessToken!;
+        final OAuthCredential credential =
+            FacebookAuthProvider.credential(accessToken.token);
+        UserCredential userCredential =
+            await auth.signInWithCredential(credential);
         user = userCredential.user;
         //final userData = await FacebookAuth.instance.getUserData();
       }
-        } on FirebaseAuthException catch (e){
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (BuildContext context) {
-                return ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                  child: AlertDialog(
-                    title: const Text("Error",style: TextStyle(
-                          color: Colors.brown, fontWeight: FontWeight.bold),),
-                    content: Text(e.message!),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text("OK"),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-            }
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            child: AlertDialog(
+              title: const Text(
+                "Error",
+                style:
+                    TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),
+              ),
+              content: Text(e.message!),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    }
     return user;
   }
 
   Future<User?> signInWithGoogle({required BuildContext context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     GoogleSignIn googleSignIn = GoogleSignIn();
-    
+
     User? user;
-    try{
+    try {
       final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
-      final GoogleSignInAuthentication? googleAuth = await googleUser?.authentication;
+      final GoogleSignInAuthentication? googleAuth =
+          await googleUser?.authentication;
       final credential = GoogleAuthProvider.credential(
         accessToken: googleAuth?.accessToken,
         idToken: googleAuth?.idToken,
-      ); 
-      UserCredential userCredential = await auth.signInWithCredential(credential);
+      );
+      UserCredential userCredential =
+          await auth.signInWithCredential(credential);
       user = userCredential.user;
-    } on FirebaseAuthException catch (e){
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return ClipRRect(
-          borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-          child: AlertDialog(
-            title: const Text("Error",style: TextStyle(
-                  color: Colors.brown, fontWeight: FontWeight.bold),),
-            content: Text(e.message!),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text("OK"),
+    } on FirebaseAuthException catch (e) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return ClipRRect(
+            borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+            child: AlertDialog(
+              title: const Text(
+                "Error",
+                style:
+                    TextStyle(color: Colors.brown, fontWeight: FontWeight.bold),
               ),
-            ],
-          ),
-        );
-      },
-    );
+              content: Text(e.message!),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("OK"),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
     return user;
   }
@@ -189,9 +202,10 @@ class _HomePageState extends State<HomePage> {
                         width: 175,
                         child: ElevatedButton(
                             onPressed: () {
-                               Navigator.push(
+                              Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const LoginPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => const LoginPage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -219,7 +233,8 @@ class _HomePageState extends State<HomePage> {
                             onPressed: () {
                               Navigator.push(
                                 context,
-                                MaterialPageRoute(builder: (context) => const SignUpPage()),
+                                MaterialPageRoute(
+                                    builder: (context) => const SignUpPage()),
                               );
                             },
                             style: ElevatedButton.styleFrom(
@@ -247,13 +262,15 @@ class _HomePageState extends State<HomePage> {
                         height: 50,
                         child: ElevatedButton.icon(
                           onPressed: () async {
-                             User? user = await signInWithGoogle(context: context); 
-                              if(user!=null){
-                                 Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const SearchPage()),
-                                );
-                              }
+                            User? user =
+                                await signInWithGoogle(context: context);
+                            if (user != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SearchPage()),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown,
@@ -265,7 +282,10 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          icon: Image.asset("assets/images/login_images/google.png",fit: BoxFit.fill,),
+                          icon: Image.asset(
+                            "assets/images/login_images/google.png",
+                            fit: BoxFit.fill,
+                          ),
                           label: const Text(
                             "Continue with Google",
                             style: TextStyle(
@@ -289,13 +309,15 @@ class _HomePageState extends State<HomePage> {
                         height: 50,
                         child: ElevatedButton.icon(
                           onPressed: () async {
-                             User? user = await signInWithFacebook(context: context); 
-                              if(user!=null){
-                                 Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const SearchPage()),
-                                );
-                              }
+                            User? user =
+                                await signInWithFacebook(context: context);
+                            if (user != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SearchPage()),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown,
@@ -307,7 +329,10 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          icon: Image.asset("assets/images/login_images/facebook.png",fit: BoxFit.fill,),
+                          icon: Image.asset(
+                            "assets/images/login_images/facebook.png",
+                            fit: BoxFit.fill,
+                          ),
                           label: const Text(
                             "Continue with Facebook",
                             style: TextStyle(
@@ -331,13 +356,15 @@ class _HomePageState extends State<HomePage> {
                         height: 50,
                         child: ElevatedButton.icon(
                           onPressed: () async {
-                             User? user = await signInWithTwitter(context: context); 
-                              if(user!=null){
-                                 Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => const SearchPage()),
-                                );
-                              }
+                            User? user =
+                                await signInWithTwitter(context: context);
+                            if (user != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const SearchPage()),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.brown,
@@ -349,7 +376,10 @@ class _HomePageState extends State<HomePage> {
                               borderRadius: BorderRadius.circular(30),
                             ),
                           ),
-                          icon: Image.asset("assets/images/login_images/twitter.png",fit: BoxFit.fill,),  
+                          icon: Image.asset(
+                            "assets/images/login_images/twitter.png",
+                            fit: BoxFit.fill,
+                          ),
                           label: const Text(
                             "Continue with Twitter",
                             style: TextStyle(

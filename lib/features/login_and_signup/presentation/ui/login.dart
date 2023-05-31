@@ -105,6 +105,7 @@ class _LoginPageState extends State<LoginPage> {
                     child: Column(
                       children: [
                         TextFormField(
+                          key: const ValueKey("emailField"),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (email) =>
                               email != null && !EmailValidator.validate(email)
@@ -140,10 +141,11 @@ class _LoginPageState extends State<LoginPage> {
                           height: 20,
                         ),
                         TextFormField(
+                          key: const ValueKey("passwordField"),
                           autovalidateMode: AutovalidateMode.onUserInteraction,
                           validator: (value) =>
                               value != null && value.length < 6
-                                  ? 'Enter min. 6 character'
+                                  ? 'Enter min. 6 characters'
                                   : null,
                           controller: _passController,
                           cursorColor: Colors.brown,
@@ -202,6 +204,7 @@ class _LoginPageState extends State<LoginPage> {
                       height: 50,
                       width: MediaQuery.of(context).size.width - 40,
                       child: ElevatedButton(
+                        key: const ValueKey("loginButton"),
                           onPressed: () async {
                             final isValid = formKey.currentState!.validate();
                             if (!isValid) return;
