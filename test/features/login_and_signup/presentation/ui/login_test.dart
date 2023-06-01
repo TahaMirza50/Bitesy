@@ -8,14 +8,12 @@ import 'package:mockito/mockito.dart';
 void main() {
   group('LoginPage Widget', () {
 
-    testWidgets('Sign Up page displays correctly', (WidgetTester tester) async {
+    testWidgets('Login page displays correctly', (WidgetTester tester) async {
 
         await tester.pumpWidget(MaterialApp(home: LoginPage()));
 
-        // Verify that the Sign Up page is displayed correctly
-        // expect(find.text('Sign Up'), findsNWidgets(2));
-        // expect(find.text('Create Account'), findsOneWidget);
-        // expect(find.text('Sign Up to get started.'), findsOneWidget);
+        expect(find.text("Welcome Back!"), findsOneWidget);
+        expect(find.text("Enter your credentials to continue"), findsOneWidget);
         expect(find.byType(TextFormField), findsNWidgets(2));
         expect(find.byType(ElevatedButton), findsOneWidget);
         expect(find.byIcon(Icons.mail), findsOneWidget);
@@ -23,7 +21,7 @@ void main() {
       // Build the widget
     });
 
-    testWidgets('Should validate email and password and login',
+    testWidgets('Should validate email and password',
         (WidgetTester tester) async {
       await tester.pumpWidget(const MaterialApp(
         home: LoginPage(),
