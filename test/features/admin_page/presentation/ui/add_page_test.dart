@@ -47,9 +47,6 @@ void main() {
       final restaurantEmail = find.byKey(const Key('email'));
       final restaurantWebsite = find.byKey(const Key('website'));
       final restaurantDescription = find.byKey(const Key('description'));
-      final restaurantLatitude = find.byKey(const Key('latitude'));
-      final restaurantLongitude = find.byKey(const Key('longitude'));
-      final restaurantAddress = find.byKey(const Key('address'));
       final addRestaurant =
           find.widgetWithText(ElevatedButton, 'Add Restaurant');
 
