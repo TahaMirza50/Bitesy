@@ -78,36 +78,6 @@ void main() {
       // Simulate tap on the GestureDetector widget
       await tester.tap(find.byType(GestureDetector));
       await tester.pumpAndSettle();
-
-      // Verify that the Dialog widget is rendered
-      // expect(find.byType(Dialog), findsOneWidget);
     });
-
-    // testWidgets('Image Widget Renders Correctly in Dialog',
-    //     (WidgetTester tester) async {
-    //   // Build the RestaurantMenu widget
-    //   await tester.pumpWidget(
-    //     MaterialApp(
-    //       home: Scaffold(
-    //         body: RestaurantMenu(restaurantModel: restaurantModel),
-    //       ),
-    //     ),
-    //   );
-
-    //   // Simulate tap on the GestureDetector widget
-    //   await tester.tap(find.byType(GestureDetector));
-    //   await tester.pumpAndSettle();
-
-    //   // Verify that the Image widget with the specified properties is rendered in the Dialog
-    //   expect(
-    //     find.byWidgetPredicate(
-    //       (widget) =>
-    //           widget is Image &&
-    //           widget.image is NetworkImage &&
-    //           widget.height == 400.0,
-    //     ),
-    //     findsOneWidget,
-    //   );
-    // });
   });
 }
