@@ -123,28 +123,5 @@ void main() {
       await tester.tap(find.text('Get Directions'));
       await tester.pumpAndSettle();
     });
-
-  //   testWidgets('Address Info Renders Correctly', (WidgetTester tester) async {
-  //     // Build the RestaurantInfo widget
-  //     await tester.pumpWidget(
-  //       MaterialApp(
-  //         home: Scaffold(
-  //           body: RestaurantInfo(restaurantModel: restaurantModel),
-  //         ),
-  //       ),
-  //     );
-
-  //     // Verify that the address info with the specified properties is rendered
-  //     expect(
-  //       find.byWidgetPredicate(
-  //         (widget) =>
-  //             widget is Column &&
-  //             widget.children.length == 2 &&
-  //             widget.children[0] is HeaderText &&
-  //             widget.children[1] is SizedBox,
-  //       ),
-  //       findsOneWidget,
-  //     );
-  //   });
   });
 }
