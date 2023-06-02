@@ -1,13 +1,18 @@
-import 'package:Bitesy/features/login_and_signup/data/model/user.dart';
 import 'package:Bitesy/features/search_page/presentation/bloc/search_page_bloc.dart';
-import 'package:flutter_test/flutter_test.dart';
 import 'package:bloc_test/bloc_test.dart';
-
+import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('Search Bloc', () {
     late SearchPageBloc searchPageBloc = SearchPageBloc();
-    late UserModel userModel;
+    
+    setUp(() {
+      searchPageBloc = SearchPageBloc();
+    });
+
+    tearDown(() {
+      searchPageBloc.close();
+    });
 
     test('should inital state be SearchPageInitialState', () {
       expect(searchPageBloc.state, searchPageInitialState);
@@ -16,14 +21,14 @@ void main() {
     blocTest(
       'should first state be SearchPageLoadingState when SearchPageInitialEvent is added.',
       build: () => searchPageBloc,
-      act: (bloc) async {
+      act: (bloc) {
         bloc.add(SearchPageInitialEvent());
       },
-      expect: () => 
-          [isA<SearchPageLoadingState>()],
+      expect: () => [
+        isA<SearchPageLoadingState>(),
+      ],
     );
   });
 }
 
 const searchPageInitialState = TypeMatcher<SearchPageInitialState>();
-const searchPageLoadingState = TypeMatcher<SearchPageLoadingState>();
