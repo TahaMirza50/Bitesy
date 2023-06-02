@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class FormFieldWidget extends StatelessWidget {
   const FormFieldWidget({
     super.key,
+    required this.textKey,
     required this.hintText,
     required this.icon,
     required this.controller,
@@ -11,6 +12,7 @@ class FormFieldWidget extends StatelessWidget {
     required this.maxLines,
     });
 
+  final String textKey;
   final String hintText;
   final IconData icon;
   final TextEditingController controller;
@@ -21,6 +23,7 @@ class FormFieldWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      key: ValueKey(textKey),
       maxLines: maxLines,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       validator: validator,

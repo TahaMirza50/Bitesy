@@ -76,6 +76,7 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                     child: Column(
                       children: [
                         FormFieldWidget(
+                            textKey: "name",
                             hintText: "Restaurant Name",
                             icon: Icons.house,
                             controller: _nameController,
@@ -89,6 +90,7 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                           height: 20,
                         ),
                         FormFieldWidget(
+                            textKey: "number",
                             hintText: "Restaurant Number",
                             icon: Icons.phone,
                             controller: _phoneController,
@@ -107,19 +109,21 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                           height: 20,
                         ),
                         FormFieldWidget(
+                            textKey: "email",
                             hintText: "Restaurant Email",
                             icon: Icons.email,
                             controller: _emailController,
                             keyboardType: TextInputType.emailAddress,
                             validator: (value) =>
                                 value != null && !EmailValidator.validate(value)
-                                    ? 'Invalid email'
+                                    ? 'Invalid Email'
                                     : null,
                             maxLines: 1),
                         const SizedBox(
                           height: 20,
                         ),
                         FormFieldWidget(
+                            textKey: "website",
                             hintText: "http://www.example.com",
                             icon: Icons.web,
                             controller: _websiteController,
@@ -133,6 +137,7 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                           height: 20,
                         ),
                         FormFieldWidget(
+                            textKey: "description",
                             hintText: "Restaurant Description",
                             icon: Icons.description,
                             controller: _descController,
@@ -195,30 +200,33 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                           ),
                         ),
                         FormFieldWidget(
+                            textKey: "latitude",
                             hintText: 'Latitude',
                             icon: Icons.location_on,
                             controller: _latitudeController,
                             keyboardType: TextInputType.number,
                             validator: (value) => value != null && value.isEmpty
-                                ? "invalid value"
+                                ? "invalid Value"
                                 : null,
                             maxLines: 1),
                         const SizedBox(
                           height: 20,
                         ),
                         FormFieldWidget(
+                            textKey: "longitude",
                             hintText: 'Longitude',
                             icon: Icons.location_on,
                             controller: _longitudeController,
                             keyboardType: TextInputType.number,
                             validator: (value) => value != null && value.isEmpty
-                                ? "invalid value"
+                                ? "invalid Value"
                                 : null,
                             maxLines: 1),
                         const SizedBox(
                           height: 20,
                         ),
                         TextFormField(
+                          key: const ValueKey("address"),
                           enabled: false,
                           controller: _addressController,
                           decoration: const InputDecoration(
@@ -270,7 +278,7 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                 setState(() {
                                   _addressController.clear();
                                 });
-                                 ScaffoldMessenger.of(context).showSnackBar(
+                                ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
                                             "Please enter correct latitude and longitude")));
@@ -300,6 +308,7 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                       height: 50,
                       width: MediaQuery.of(context).size.width - 40,
                       child: ElevatedButton(
+                        key: const ValueKey("Add Restaurant"),
                           onPressed: () async {
                             final isValid = formKey.currentState!.validate();
                             if (!isValid) return;
@@ -313,11 +322,10 @@ class _AddRestaurantPageState extends State<AddRestaurantPage> {
                                           Text("Please upload all images.")));
                               return;
                             }
-                            if(_addressController.text.isEmpty){
+                            if (_addressController.text.isEmpty) {
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
-                                      content:
-                                          Text("Please check address.")));
+                                      content: Text("Please check address.")));
                               return;
                             }
                             setState(() {
