@@ -118,7 +118,7 @@ class _SearchPageState extends State<SearchPage> {
               child: AppBar(
         shadowColor: Colors.brown,
         flexibleSpace: Padding(
-          padding: const EdgeInsets.only(bottom: 10,top: 30, right: 30,left: 30),
+          padding: const EdgeInsets.only(bottom: 20,top: 30, right: 30,left: 30),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.end,
@@ -178,8 +178,7 @@ class _SearchPageState extends State<SearchPage> {
               Align(
                 alignment: Alignment.centerLeft,
                 child: SizedBox(
-                  height: 60,
-                  width: 140,
+                  width: (MediaQuery.of(context).size.width/2)-60,
                   child: DropdownButtonFormField(
                     iconSize: 20,
                     style: const TextStyle(color: Colors.brown, fontSize: 15),
