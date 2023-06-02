@@ -91,7 +91,15 @@ class _RestaurantPageState extends State<RestaurantPage> {
         Container(
           width: MediaQuery.of(context).size.width,
           child: ElevatedButton(
-            onPressed: () {},
+            onPressed: () async {
+              final uri = Uri.parse(
+                  'google.navigation:q=${widget.restaurantModel.latitude},${widget.restaurantModel.longitude}&mode=d');
+              if (await canLaunchUrl(uri)) {
+                await launchUrl(uri);
+              } else {
+                throw 'Could not open Google Maps';
+              }
+            },
             child: Text('Directions',
                 style: TextStyle(
                     fontSize: 16,
