@@ -35,7 +35,7 @@ class RestaurantRepository {
       response.message = "Restaurant read successfully";
     } catch (error) {
       response.status = 400;
-      response.message = error.toString();
+      response.message = "Restaurant not found";
     }
 
     return response;
